@@ -6,11 +6,11 @@
 <?import javafx.scene.text.*?>
 
 
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.proyectococinav2.ui.controller.InsertarRecetaViewController">
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.proyectococinav2.ui.controller.RecetaFormViewController">
    <children>
       <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="17.0">
       
-          <Label alignment="CENTER" text="Insertar Receta">
+          <Label alignment="CENTER" text="Formulario Receta">
               <font>
                   <Font size="24.0" />
               </font>

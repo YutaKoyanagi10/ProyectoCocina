@@ -60,12 +60,12 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Optional<Ingredient> findIngredientByName(String name) {
-        return Optional.ofNullable(ingredientRepository.findIngredientByName(name).orElseThrow(() -> new IllegalArgumentException("Ingredient with name " + name + " does not exist.")));
+        return ingredientRepository.findIngredientByName(name);
     }
 
     @Override
     public Optional<Long> findIngredientIdByName(String name) {
-        return Optional.ofNullable(ingredientRepository.findIngredientIdByName(name).orElseThrow(() -> new IllegalArgumentException("Ingredient with name " + name + " does not exist.")));
+        return ingredientRepository.findIngredientIdByName(name);
     }
     @Override
     public List<String> findAllNames() {

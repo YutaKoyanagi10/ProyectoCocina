@@ -12,7 +12,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public Optional<Supplier> findSupplierByName(String name) {
-        String sql = "SELECT * FROM SUPPLIER WHERE NAME = ?";
+        String sql = "SELECT * FROM SUPPLIERS WHERE NAME = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
@@ -31,7 +31,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public Optional<Long> findSupplierIdByName(String name) {
-        String sql = "SELECT ID FROM SUPPLIER WHERE NAME = ?";
+        String sql = "SELECT ID FROM SUPPLIERS WHERE NAME = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
@@ -47,7 +47,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public void save(Supplier entity) {
-        String sql = "INSERT INTO SUPPLIER (NAME, CONTACT_INFO) values (?, ?)";
+        String sql = "INSERT INTO SUPPLIERS (NAME, CONTACT_INFO) values (?, ?)";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, entity.getName());
@@ -60,7 +60,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public void update(Supplier entity) {
-        String sql = "UPDATE SUPPLIER SET NAME = ?, CONTACT_INFO = ? WHERE ID = ?";
+        String sql = "UPDATE SUPPLIERS SET NAME = ?, CONTACT_INFO = ? WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, entity.getName());
@@ -74,7 +74,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public List<Supplier> findAll() {
-        String sql = "SELECT * FROM SUPPLIER";
+        String sql = "SELECT * FROM SUPPLIERS";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql);
              var resultSet = preparedStatement.executeQuery()) {
@@ -94,7 +94,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public void deleteById(Long aLong) {
-        String sql = "DELETE FROM SUPPLIER WHERE ID = ?";
+        String sql = "DELETE FROM SUPPLIERS WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, aLong);
@@ -106,7 +106,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-        String sql = "SELECT COUNT(*) FROM SUPPLIER WHERE ID = ?";
+        String sql = "SELECT COUNT(*) FROM SUPPLIERS WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, aLong);
@@ -123,7 +123,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public Optional<Supplier> findById(Long id) {
-        String sql = "SELECT * FROM SUPPLIER WHERE ID = ?";
+        String sql = "SELECT * FROM SUPPLIERS WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);

@@ -24,9 +24,9 @@ public class MenuViewController {
     @FXML
     private Button proveedoresButton;
     @FXML
-    private Button importarDatosButton;
+    private Button insertarMenuSemanalButton;
     @FXML
-    private Button exportarButton;
+    private Button exportarListaDeComprasButton;
     @FXML
     private Button menuSemanalButton;
 
@@ -34,31 +34,35 @@ public class MenuViewController {
 
     }
 
-    @FXML
-    private void onInsertarReceta() {
+    private void setSceneTitleAndShow(String fxmlpath, String title, Scene scene) {
         try {
-            Stage stage = (Stage) insertarRecetaButton.getScene().getWindow();
-            Scene menuScene = stage.getScene(); // Guarda la escena del menú
+            Stage stage = (Stage) scene.getWindow();
+            Scene menuScene = stage.getScene();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococinav2/ui/View/InsertarRecetaView.fxml"));
-            Parent insertarRecetaRoot = loader.load();
-            Scene insertarRecetaScene = new Scene(insertarRecetaRoot);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlpath));
+            Parent root = loader.load();
+            Scene newScene = new Scene(root);
 
-            // Pasa la escena del menú al nuevo controlador
-            InsertarRecetaViewController controller = loader.getController();
+            // Pasar la escena del menú al nuevo controlador si es necesario
+            Controller controller = loader.getController();
             controller.setMenuScene(menuScene);
 
-            stage.setTitle("Insertar Receta");
-            stage.setScene(insertarRecetaScene);
+            stage.setTitle(title);
+            stage.setScene(newScene);
             stage.show();
         } catch (IOException e) {
-            throw new RuntimeException("Error al cargar la vista de insertar receta", e);
+            throw new RuntimeException("Error al cargar la vista: " + fxmlpath, e);
         }
     }
 
     @FXML
+    private void onInsertarReceta() {
+        setSceneTitleAndShow("/org/proyectococinav2/ui/view/RecetaFormView.fxml", "Insertar Receta", insertarRecetaButton.getScene());
+    }
+
+    @FXML
     private void onInsertarIngrediente() {
-        // Lógica para insertar ingrediente
+        setSceneTitleAndShow("/org/proyectococinav2/ui/view/IngredienteFormView.fxml", "Insertar Ingrediente", insertarIngredienteButton.getScene());
     }
 
     @FXML
@@ -68,12 +72,12 @@ public class MenuViewController {
 
     @FXML
     private void onRecetas() {
-        // Lógica para mostrar recetas
+        setSceneTitleAndShow("/org/proyectococinav2/ui/view/RecetasView.fxml", "Recetas", recetasButton.getScene());
     }
 
     @FXML
     private void onIngredientes() {
-        // Lógica para mostrar ingredientes
+        
     }
 
     @FXML
@@ -82,12 +86,12 @@ public class MenuViewController {
     }
 
     @FXML
-    private void onImportarDatos() {
+    private void onInsertarMenuSemanal() {
         // Lógica para importar datos
     }
 
     @FXML
-    private void onExportar() {
+    private void onExportarListaDeCompras() {
         // Lógica para exportar datos
     }
 

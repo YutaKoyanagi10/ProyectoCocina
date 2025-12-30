@@ -23,7 +23,18 @@ public class IngredientValidator {
         }
         return false;
     }
+    
     public static boolean validateRecipeFields(String recipeName, String instructions) {
         return recipeName != null && !recipeName.trim().isEmpty() && instructions != null && !instructions.trim().isEmpty();
+    }
+
+    public static boolean validateIngredientFields(String ingredientName, String supplierName) {
+        if (ingredientName == null || ingredientName.trim().isEmpty()) {
+            return false;
+        }
+        if (supplierName == null || supplierName.trim().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

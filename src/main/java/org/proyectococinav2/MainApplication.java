@@ -12,7 +12,7 @@ import java.util.Objects;
 public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/org/proyectococinav2/ui/View/MenuView.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/org/proyectococinav2/ui/view/MenuView.fxml")));
         primaryStage.setTitle("Menú Principal");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinWidth(800);
@@ -22,6 +22,8 @@ public class MainApplication extends Application {
     }
 
     public static void main(String[] args) {
+        // Crear la base de datos y las tablas si no existen
+        DataBaseConfig.getInstance().createTables();
         launch(args);
     }
 }

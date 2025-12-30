@@ -30,13 +30,13 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </padding>
         <Button fx:id="insertarRecetaButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onInsertarReceta" text="Insertar Receta" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-        <Button minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" text="Insertar Ingrediente" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-        <Button minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" text="Insertar Proveedor" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-        <Button minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" text="Recetas" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-        <Button minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" text="Ingredientes" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-        <Button minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" text="Proveedores" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-        <Button minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" text="Importar Datos" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-        <Button minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" text="Exportar" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-        <Button minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" text="Menu Semanal" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+        <Button fx:id="insertarIngredienteButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onInsertarIngrediente" text="Insertar Ingrediente" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+        <Button fx:id="insertarProveedorButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onInsertarProveedor" text="Insertar Proveedor" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+        <Button fx:id="recetasButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onRecetas" text="Recetas" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+        <Button fx:id="ingredientesButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onIngredientes" text="Ingredientes" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+        <Button fx:id="proveedoresButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onProveedores" text="Proveedores" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+        <Button fx:id="insertarMenuSemanalButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onInsertarMenuSemanal" text="Insertar Menu Semanal" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+        <Button fx:id="exportarListaDeComprasButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onExportarListaDeCompras" text="Exportar Lista de Compras" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+        <Button fx:id="menuSemanalButton" minHeight="60" minWidth="150" maxWidth="Infinity" maxHeight="Infinity" onAction="#onMenuSemanal" text="Menu Semanal" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
     </GridPane>
 </VBox>

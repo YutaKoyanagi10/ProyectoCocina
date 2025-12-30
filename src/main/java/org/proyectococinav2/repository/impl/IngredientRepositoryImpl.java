@@ -14,7 +14,7 @@ import java.util.Optional;
 public class IngredientRepositoryImpl implements IngredientRepository {
     @Override
     public List<Ingredient> findAllBySupplierId(Long supplierId) {
-        String sql = "SELECT * FROM INGREDIENT WHERE SUPPLIER_ID = ?";
+        String sql = "SELECT * FROM INGREDIENTS WHERE SUPPLIER_ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, supplierId);
@@ -40,7 +40,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
     @Override
     public Optional<Ingredient> findIngredientByName(String name) {
-        String sql = "SELECT * FROM INGREDIENT WHERE NAME = ?";
+        String sql = "SELECT * FROM INGREDIENTS WHERE NAME = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
@@ -52,7 +52,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
     @Override
     public Optional<Long> findIngredientIdByName(String name) {
-        String sql = "SELECT ID FROM INGREDIENT WHERE NAME = ?";
+        String sql = "SELECT ID FROM INGREDIENTS WHERE NAME = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
@@ -69,7 +69,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
     @Override
     public Optional<Ingredient> findById(Long id) {
-        String sql = "SELECT * FROM INGREDIENT WHERE ID = ?";
+        String sql = "SELECT * FROM INGREDIENTS WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -94,7 +94,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
     @Override
     public void save(Ingredient entity) {
-        String sql = "INSERT INTO INGREDIENT (NAME, SUPPLIER_ID) VALUES (?, ?)";
+        String sql = "INSERT INTO INGREDIENTS (NAME, SUPPLIER_ID) VALUES (?, ?)";
          try (var connection = DataBaseConfig.getInstance().getConnection();
               var preparedStatement = connection.prepareStatement(sql)) {
              preparedStatement.setString(1, entity.getName());
@@ -107,7 +107,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
     @Override
     public void update(Ingredient entity) {
-        String sql = "UPDATE INGREDIENT SET NAME = ?, SUPPLIER_ID = ? WHERE ID = ?";
+        String sql = "UPDATE INGREDIENTS SET NAME = ?, SUPPLIER_ID = ? WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, entity.getName());
@@ -121,7 +121,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
     @Override
     public List<Ingredient> findAll() {
-        String sql = "SELECT * FROM INGREDIENT";
+        String sql = "SELECT * FROM INGREDIENTS";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql);
              var resultSet = preparedStatement.executeQuery()) {
@@ -133,7 +133,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
     @Override
     public void deleteById(Long aLong) {
-        String sql = "DELETE FROM INGREDIENT WHERE ID = ?";
+        String sql = "DELETE FROM INGREDIENTS WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, aLong);
@@ -145,7 +145,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-        String sql = "SELECT COUNT(*) FROM INGREDIENT WHERE ID = ?";
+        String sql = "SELECT COUNT(*) FROM INGREDIENTS WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, aLong);
@@ -161,7 +161,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
     }
     @Override
     public List<String> findAllNames() {
-        String sql = "SELECT NAME FROM INGREDIENT";
+        String sql = "SELECT NAME FROM INGREDIENTS";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql);
              var resultSet = preparedStatement.executeQuery()) {

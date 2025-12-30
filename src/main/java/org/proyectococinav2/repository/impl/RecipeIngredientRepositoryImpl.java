@@ -14,7 +14,7 @@ import java.util.Optional;
 public class RecipeIngredientRepositoryImpl implements RecipeIngredientRepository {
     @Override
     public List<RecipeIngredient> findAllByRecipeId(Long Id) {
-        String sql = "SELECT * FROM recipe_ingredient WHERE recipe_id = ?";
+        String sql = "SELECT * FROM recipe_ingredients WHERE recipe_id = ?";
         try {var connection = DataBaseConfig.getInstance().getConnection();
             var preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, Id);
@@ -27,7 +27,7 @@ public class RecipeIngredientRepositoryImpl implements RecipeIngredientRepositor
 
     @Override
     public List<RecipeIngredient> findAllByIngredientId(Long Id) {
-        String sql = "SELECT * FROM recipe_ingredient WHERE ingredient_id = ?";
+        String sql = "SELECT * FROM recipe_ingredients WHERE ingredient_id = ?";
         try {var connection = DataBaseConfig.getInstance().getConnection();
             var preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, Id);
@@ -52,7 +52,7 @@ public class RecipeIngredientRepositoryImpl implements RecipeIngredientRepositor
     }
     @Override
     public void save(RecipeIngredient entity) {
-        String sql = "INSERT INTO recipe_ingredient (recipe_id, ingredient_id, serving_per_person, unit) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, serving_per_person, unit) VALUES (?, ?, ?, ?)";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, entity.getRecipeId());
@@ -67,7 +67,7 @@ public class RecipeIngredientRepositoryImpl implements RecipeIngredientRepositor
 
     @Override
     public void update(RecipeIngredient entity) {
-        String sql = "UPDATE recipe_ingredient SET recipe_id = ?, ingredient_id = ?, serving_per_person = ?, unit = ? WHERE recipe_id = ? AND ingredient_id = ?";
+        String sql = "UPDATE recipe_ingredients SET recipe_id = ?, ingredient_id = ?, serving_per_person = ?, unit = ? WHERE recipe_id = ? AND ingredient_id = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, entity.getRecipeId());
@@ -84,7 +84,7 @@ public class RecipeIngredientRepositoryImpl implements RecipeIngredientRepositor
 
     @Override
     public List<RecipeIngredient> findAll() {
-        String sql = "SELECT * FROM recipe_ingredient";
+        String sql = "SELECT * FROM recipe_ingredients";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql);
              var resultSet = preparedStatement.executeQuery()) {
@@ -96,7 +96,7 @@ public class RecipeIngredientRepositoryImpl implements RecipeIngredientRepositor
 
     @Override
     public void deleteById(Long recipeId, Long ingredientId) {
-        String sql = "DELETE FROM recipe_ingredient WHERE recipe_id = ? AND ingredient_id = ?";
+        String sql = "DELETE FROM recipe_ingredients WHERE recipe_id = ? AND ingredient_id = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, recipeId);
@@ -109,7 +109,7 @@ public class RecipeIngredientRepositoryImpl implements RecipeIngredientRepositor
 
     @Override
     public boolean existsById(Long recipeId, Long ingredientId) {
-        String sql = "SELECT 1 FROM recipe_ingredient WHERE recipe_id = ? AND ingredient_id = ?";
+        String sql = "SELECT 1 FROM recipe_ingredients WHERE recipe_id = ? AND ingredient_id = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, recipeId);
@@ -124,7 +124,7 @@ public class RecipeIngredientRepositoryImpl implements RecipeIngredientRepositor
 
     @Override
     public Optional<RecipeIngredient> findById(Long recipeId, Long ingredientId) {
-        String sql = "SELECT * FROM recipe_ingredient WHERE recipe_id = ? AND ingredient_id = ?";
+        String sql = "SELECT * FROM recipe_ingredients WHERE recipe_id = ? AND ingredient_id = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, recipeId);

@@ -14,7 +14,7 @@ public class RecipeRepositoryImp implements RecipeRepository {
 
     @Override
     public Optional<Recipe> findRecipeByName(String name) {
-        String sql = "SELECT * FROM RECIPE WHERE NAME = ?";
+        String sql = "SELECT * FROM RECIPES WHERE NAME = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
@@ -26,7 +26,7 @@ public class RecipeRepositoryImp implements RecipeRepository {
 
     @Override
     public Optional<Long> findRecipeIdByName(String name) {
-        String sql = "SELECT ID FROM RECIPE WHERE NAME = ?";
+        String sql = "SELECT ID FROM RECIPES WHERE NAME = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
@@ -42,7 +42,7 @@ public class RecipeRepositoryImp implements RecipeRepository {
 
     @Override
     public void save(Recipe entity) {
-        String sql = "INSERT INTO RECIPE (NAME, INSTRUCTIONS) VALUES (?, ?)";
+        String sql = "INSERT INTO RECIPES (NAME, INSTRUCTIONS) VALUES (?, ?)";
          try (var connection = DataBaseConfig.getInstance().getConnection();
               var preparedStatement = connection.prepareStatement(sql)) {
              preparedStatement.setString(1, entity.getName());
@@ -55,7 +55,7 @@ public class RecipeRepositoryImp implements RecipeRepository {
 
     @Override
     public void update(Recipe entity) {
-        String sql = "UPDATE RECIPE SET NAME = ?, INSTRUCTIONS = ? WHERE ID = ?";
+        String sql = "UPDATE RECIPES SET NAME = ?, INSTRUCTIONS = ? WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, entity.getName());
@@ -69,7 +69,7 @@ public class RecipeRepositoryImp implements RecipeRepository {
 
     @Override
     public List<Recipe> findAll() {
-        String sql = "SELECT * FROM RECIPE";
+        String sql = "SELECT * FROM RECIPES";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql);
              var resultSet = preparedStatement.executeQuery()) {
@@ -89,7 +89,7 @@ public class RecipeRepositoryImp implements RecipeRepository {
 
     @Override
     public void deleteById(Long aLong) {
-        String sql = "DELETE FROM RECIPE WHERE ID = ?";
+        String sql = "DELETE FROM RECIPES WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, aLong);
@@ -101,7 +101,7 @@ public class RecipeRepositoryImp implements RecipeRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-        String sql = "SELECT COUNT(*) FROM RECIPE WHERE ID = ?";
+        String sql = "SELECT COUNT(*) FROM RECIPES WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, aLong);
@@ -117,7 +117,7 @@ public class RecipeRepositoryImp implements RecipeRepository {
 
     @Override
     public Optional<Recipe> findById(Long id) {
-        String sql = "SELECT * FROM RECIPE WHERE ID = ?";
+        String sql = "SELECT * FROM RECIPES WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);

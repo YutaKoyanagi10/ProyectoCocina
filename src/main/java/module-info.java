@@ -10,5 +10,6 @@ module org.proyectococinav2 {
     opens org.proyectococinav2 to javafx.fxml;
     opens org.proyectococinav2.ui.controller to javafx.fxml;
     exports org.proyectococinav2;
+    exports org.proyectococinav2.domain.dto;
     exports org.proyectococinav2.ui.controller to javafx.fxml;
 }
