@@ -1,4 +1,4 @@
-module org.proyectococinav2 {
+module org.proyectococina {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -7,9 +7,9 @@ module org.proyectococinav2 {
     requires net.synedra.validatorfx;
     requires java.sql;
 
-    opens org.proyectococinav2 to javafx.fxml;
-    opens org.proyectococinav2.ui.controller to javafx.fxml;
-    exports org.proyectococinav2;
-    exports org.proyectococinav2.domain.dto;
-    exports org.proyectococinav2.ui.controller to javafx.fxml;
+    opens org.proyectococina to javafx.fxml;
+    opens org.proyectococina.ui.controller to javafx.fxml;
+    exports org.proyectococina;
+    exports org.proyectococina.domain.dto;
+    exports org.proyectococina.ui.controller to javafx.fxml;
 }

@@ -7,7 +7,7 @@
 
 <VBox alignment="TOP_CENTER" spacing="20" xmlns="http://javafx.com/javafx/17.0.12" 
       xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="org.proyectococinav2.ui.controller.ProveedoresViewController">
+      fx:controller="org.proyectococina.ui.controller.ProveedoresViewController">
     
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
