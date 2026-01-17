@@ -17,6 +17,12 @@ public class IngredientDTO {
         this.updatedAt = updatedAt;
     }
 
+    public IngredientDTO(Long id, String name, String supplierName) {
+        this.id = id;
+        this.name = name;
+        this.supplierName = supplierName;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

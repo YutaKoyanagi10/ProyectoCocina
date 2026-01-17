@@ -22,6 +22,13 @@ public class RecipeDTO {
         this.updatedAt = updatedAt;
     }
 
+    public RecipeDTO(Long id, String name, String instructions, List<RecipeIngredientDTO> ingredients) {
+        this.id = id;
+        this.name = name;
+        this.instructions = instructions;
+        this.ingredients = ingredients;
+    }
+
     public Long getId() {
         return id;
     }

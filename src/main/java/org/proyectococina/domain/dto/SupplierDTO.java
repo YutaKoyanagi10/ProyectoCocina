@@ -17,6 +17,12 @@ public class SupplierDTO {
         this.updatedAt = updatedAt;
     }
 
+    public SupplierDTO(Long id, String name, String contactInfo) {
+        this.id = id;
+        this.name = name;
+        this.contactInfo = contactInfo;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="700.0" prefWidth="1000.0" spacing="0" xmlns="http://javafx.com/javafx/17.0.12" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="org.proyectococina.ui.controller.IngredienteFormViewController">
+    
+    <VBox alignment="CENTER">
+        <padding>
+            <Insets top="40.0" bottom="20.0" />
+        </padding>
+        <Label text="Formulario de Ingrediente">
+            <font>
+                <Font name="System Bold" size="32.0" />
+            </font>
+        </Label>
+    </VBox>
+
+    <VBox VBox.vgrow="ALWAYS" alignment="TOP_CENTER">
+        <padding>
+            <Insets left="200.0" right="200.0" top="20.0" />
+        </padding>
+        
+        <VBox spacing="25.0" maxWidth="600.0">
+            <VBox spacing="8.0">
+                <Label text="Nombre del Ingrediente">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="ingredientNameField" promptText="Ej: Harina de trigo" prefHeight="45.0">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </TextField>
+            </VBox>
+        
+            <VBox spacing="8.0">
+                <Label text="Proveedor Asociado">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="proveedorComboBox" promptText="Selecciona un proveedor" maxWidth="Infinity" prefHeight="45.0" />
+            </VBox>
+        </VBox>
+    </VBox>
+
+    <VBox>
+        <Separator />
+        <HBox alignment="CENTER_RIGHT" spacing="20.0">
+            <padding>
+                <Insets bottom="30.0" left="50.0" right="50.0" top="20.0" />
+            </padding>
+            <Button onAction="#onCancel" prefHeight="40.0" prefWidth="120.0" text="Cancelar" />
+            <Button onAction="#onSaveIngredient" prefHeight="40.0" prefWidth="180.0" text="Guardar Ingrediente" />
+        </HBox>
+    </VBox>
+</VBox>

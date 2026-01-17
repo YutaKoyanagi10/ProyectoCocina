@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="700.0" prefWidth="1000.0" spacing="0" xmlns="http://javafx.com/javafx/17.0.12" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="org.proyectococina.ui.controller.RecetaFormViewController">
+    
+    <VBox alignment="CENTER">
+        <padding>
+            <Insets top="20.0" bottom="10.0" />
+        </padding>
+        <Label text="Formulario de Receta">
+            <font>
+                <Font name="System Bold" size="32.0" />
+            </font>
+        </Label>
+    </VBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <content>
+            <VBox spacing="25.0">
+                <padding>
+                    <Insets left="50.0" right="50.0" top="10.0" bottom="20.0" />
+                </padding>
+                
+                <VBox spacing="8.0">
+                    <Label text="Nombre de la Receta">
+                        <font>
+                            <Font name="System Bold" size="16.0" />
+                        </font>
+                    </Label>
+                    <TextField fx:id="recipeNameField" promptText="Ej: Lasaña de carne" prefHeight="45.0">
+                        <font>
+                            <Font size="14.0" />
+                        </font>
+                    </TextField>
+                </VBox>
+            
+                <VBox spacing="8.0">
+                    <Label text="Instrucciones">
+                        <font>
+                            <Font name="System Bold" size="16.0" />
+                        </font>
+                    </Label>
+                    <TextArea fx:id="instructionArea" prefHeight="180.0" promptText="Escribe los pasos aquí..." wrapText="true">
+                        <font>
+                            <Font size="14.0" />
+                        </font>
+                    </TextArea>
+                </VBox>
+
+                <VBox spacing="10.0">
+                    <HBox alignment="CENTER_LEFT" spacing="15.0">
+                        <Label text="Ingredientes Necesarios">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <Button onAction="#onAddIngredient" text="+ Añadir Fila" />
+                    </HBox>
+                    
+                    <VBox fx:id="ingredientBox" spacing="10">
+                        <padding>
+                            <Insets top="10" bottom="10" left="10" right="10" />
+                        </padding>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+
+    <VBox>
+        <Separator />
+        <HBox alignment="CENTER_RIGHT" spacing="20.0">
+            <padding>
+                <Insets bottom="25.0" left="40.0" right="40.0" top="20.0" />
+            </padding>
+            <Button onAction="#onCancel" prefHeight="40.0" prefWidth="120.0" text="Cancelar" />
+            <Button onAction="#onSaveRecipe" prefHeight="40.0" prefWidth="160.0" text="Guardar Receta" />
+        </HBox>
+    </VBox>
+</VBox>
