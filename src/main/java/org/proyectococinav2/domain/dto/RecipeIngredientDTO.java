@@ -3,44 +3,28 @@ package org.proyectococinav2.domain.dto;
 import org.proyectococinav2.domain.model.MeasurementUnit;
 
 public class RecipeIngredientDTO {
-    private Long recipeId;
-    private Long ingredientId;
-    private double servingPerPerson;
+    private double quantity;
+    private String ingredientName;
     private MeasurementUnit unit;
-    private IngredientDTO ingredient;
 
     public RecipeIngredientDTO() {}
 
-    public RecipeIngredientDTO(Long recipeId, Long ingredientId, double servingPerPerson, MeasurementUnit unit) {
-        this.recipeId = recipeId;
-        this.ingredientId = ingredientId;
-        this.servingPerPerson = servingPerPerson;
+    public RecipeIngredientDTO(String ingredientName, double quantity, MeasurementUnit unit) {
+        this.ingredientName = ingredientName;
+        this.quantity = quantity;
         this.unit = unit;
     }
-
-    public Long getRecipeId() {
-        return recipeId;
+    public String getIngredientName() {
+        return ingredientName;
     }
-    public void setRecipeId(Long recipeId) {
-        this.recipeId = recipeId;
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
     }
-    public Long getIngredientId() {
-        return ingredientId;
+    public double getQuantity() {
+        return quantity;
     }
-    public void setIngredientId(Long ingredientId) {
-        this.ingredientId = ingredientId;
-    }
-    public double getServingPerPerson() {
-        return servingPerPerson;
-    }
-    public void setServingPerPerson(double servingPerPerson) {
-        this.servingPerPerson = servingPerPerson;
-    }
-    public IngredientDTO getIngredient() {
-        return ingredient;
-    }
-    public void setIngredient(IngredientDTO ingredient) {
-        this.ingredient = ingredient;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
     public MeasurementUnit getUnit() {

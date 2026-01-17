@@ -3,46 +3,32 @@ package org.proyectococinav2.domain.dto;
 public class IngredientDTO {
     private Long id;
     private String name;
-    private Long supplierId;
-    private SupplierDTO supplier;
+    private String supplierName;
+    private String insertedAt; 
+    private String updatedAt;
 
     public IngredientDTO() {}
 
-    public IngredientDTO(Long id, String name, Long supplierId) {
+    public IngredientDTO(Long id, String name, String supplierName, String insertedAt, String updatedAt) {
         this.id = id;
         this.name = name;
-        this.supplierId = supplierId;
+        this.supplierName = supplierName;
+        this.insertedAt = insertedAt;
+        this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public String getSupplierName() { return supplierName; }
+    public void setSupplierName(String supplierName) { this.supplierName = supplierName; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getInsertedAt() { return insertedAt; }
+    public void setInsertedAt(String insertedAt) { this.insertedAt = insertedAt; }
 
-    public Long getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
-    }
-
-    public SupplierDTO getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(SupplierDTO supplier) {
-        this.supplier = supplier;
-    }
+    public String getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
 }
