@@ -1,78 +1,94 @@
 package org.proyectococinav2.ui.controller;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.stage.Stage;
-import org.proyectococinav2.domain.dto.RecipeDTO;
-import org.proyectococinav2.domain.mapper.RecipeMapper;
-import org.proyectococinav2.domain.model.Recipe;
-import org.proyectococinav2.repository.impl.RecipeRepositoryImp;
-import org.proyectococinav2.service.RecipeService;
-import org.proyectococinav2.service.impl.RecipeServiceImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Alert;
-import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
-import static javafx.scene.control.Alert.AlertType.INFORMATION;
+import javafx.scene.layout.StackPane;
+import org.proyectococinav2.domain.dto.RecipeDTO;
+import org.proyectococinav2.service.RecipeService;
 
 import java.io.IOException;
 
-import javafx.scene.control.ButtonType;
+public class RecetasViewController {
 
-public class RecetasViewController extends Controller {
-    @FXML
-    private TableView<RecipeDTO> recetasTable;
-    @FXML
-    private TableColumn<RecipeDTO, Long> idColumn;
-    @FXML
-    private TableColumn<RecipeDTO, String> nombreColumn;
-    @FXML
-    private TableColumn<RecipeDTO, String> instruccionColumn;
-    @FXML
-    private TableColumn<RecipeDTO, Void> accionesColumn;
+    @FXML private TableView<RecipeDTO> recetasTable;
+    @FXML private TableColumn<RecipeDTO, Long> idColumn;
+    @FXML private TableColumn<RecipeDTO, String> nombreColumn;
+    @FXML private TableColumn<RecipeDTO, String> instruccionColumn;
+    @FXML private TableColumn<RecipeDTO, Void> accionesColumn;
+    @FXML private TableColumn<RecipeDTO, String> fechaAltaColumn;
+    @FXML private TableColumn<RecipeDTO, String> fechaModColumn;
+    @FXML private TextField searchField;
 
-    private final RecipeService recipeService = new RecipeServiceImpl(new RecipeRepositoryImp());
+    private final ObservableList<RecipeDTO> masterData = FXCollections.observableArrayList();
+
+    private final RecipeService recipeService = new RecipeService(); 
 
     @FXML
     public void initialize() {
+        configurarColumnas();
+        configurarAcciones();
+        setupFiltrado();
+        cargarRecetas();
+    }
+
+    private void configurarColumnas() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         instruccionColumn.setCellValueFactory(new PropertyValueFactory<>("instructions"));
-        ObservableList<RecipeDTO> recetas = FXCollections.observableArrayList();
-        for (Recipe recipe : recipeService.findAll()) {
-            recetas.add(RecipeMapper.toDTO(recipe));
-        }
-        recetasTable.setItems(recetas);
-        // Agregar columna de acciones
+        fechaAltaColumn.setCellValueFactory(new PropertyValueFactory<>("insertedAt"));
+        fechaModColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
+    }
+
+    private void setupFiltrado() {
+        FilteredList<RecipeDTO> filteredData = new FilteredList<>(masterData, p -> true);
+
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            filteredData.setPredicate(receta -> {
+                if (newVal == null || newVal.isBlank()) return true;
+                String filter = newVal.toLowerCase();
+                
+                return (receta.getName() != null && receta.getName().toLowerCase().contains(filter)) ||
+                       (receta.getInstructions() != null && receta.getInstructions().toLowerCase().contains(filter));
+            });
+        });
+
+        SortedList<RecipeDTO> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(recetasTable.comparatorProperty());
+        recetasTable.setItems(sortedData);
+    }
+
+    private void cargarRecetas() {
+        masterData.setAll(recipeService.findAll());
+    }
+
+    private void configurarAcciones() {
         accionesColumn.setCellFactory(col -> new TableCell<>() {
             private final Button btnVer = new Button("Ver");
             private final Button btnEliminar = new Button("Eliminar");
+            private final HBox container = new HBox(10, btnVer, btnEliminar);
+
             {
-                btnVer.setOnAction(e -> {
-                    RecipeDTO receta = getTableView().getItems().get(getIndex());
-                    verReceta(receta);
-                });
-                btnEliminar.setOnAction(e -> {
-                    RecipeDTO receta = getTableView().getItems().get(getIndex());
-                    eliminarReceta(receta);
-                });
+                container.setAlignment(Pos.CENTER);
+                btnVer.setOnAction(e -> verReceta(getTableRow().getItem()));
+                btnEliminar.setOnAction(e -> eliminarReceta(getTableRow().getItem()));
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
+                if (empty || getTableRow().getItem() == null) {
                     setGraphic(null);
                 } else {
-                    HBox box = new HBox(5, btnVer, btnEliminar);
-                    setGraphic(box);
+                    setGraphic(container);
                 }
             }
         });
@@ -84,39 +100,28 @@ public class RecetasViewController extends Controller {
             Parent root = loader.load();
 
             RecetaFormViewController controller = loader.getController();
-            // Pasar la escena actual para poder volver
-            controller.setMenuScene(recetasTable.getScene());
             controller.setRecipe(receta);
 
-            // Cambiar la escena principal en vez de abrir una nueva ventana
-            Stage stage = (Stage) recetasTable.getScene().getWindow();
-            stage.setTitle("Ver Receta");
-            stage.setScene(new Scene(root));
-            stage.show();
+            StackPane contentArea = (StackPane) recetasTable.getScene().lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(root);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error al cargar el formulario de edición: " + e.getMessage());
         }
     }
 
     private void eliminarReceta(RecipeDTO receta) {
-        // Confirmar eliminación
-        Alert alert = new Alert(CONFIRMATION, "¿Seguro que deseas eliminar la receta '" + receta.getName() + "'?", ButtonType.YES, ButtonType.NO);
-        alert.setTitle("Confirmar eliminación");
-        alert.setHeaderText(null);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+            "¿Seguro que deseas eliminar la receta '" + receta.getName() + "'?", 
+            ButtonType.YES, ButtonType.NO);
+            
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
-                // Eliminar de la base de datos
-                recipeService.deleteById(receta.getId());
-                // Eliminar de la tabla
-                recetasTable.getItems().remove(receta);
-                Alert info = new Alert(INFORMATION, "Receta eliminada correctamente.", ButtonType.OK);
-                info.setHeaderText(null);
-                info.showAndWait();
+                // El servicio maneja el borrado en cascada
+                recipeService.delete(receta);
+                cargarRecetas(); // Refrescamos la tabla
             }
         });
-    }
-    @FXML
-    private void onCancel() {
-        volverAlMenuPrincipal(recetasTable.getScene());
     }
 }
