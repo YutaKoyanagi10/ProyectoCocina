@@ -1,27 +1,27 @@
 package org.proyectococinav2.domain.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Recipe {
-    private long id;
+    private Long id;
     private String name;
     private String instructions;
-    private LocalDate date;
+    private LocalDateTime insertedAt;
+    private LocalDateTime updatedAt;
 
     public Recipe() {}
 
-    public Recipe(long id, String name, String instructions, LocalDate date) {
+    public Recipe(Long id, String name, String instructions) {
         this.id = id;
         this.name = name;
         this.instructions = instructions;
-        this.date = date;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,11 +41,19 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDateTime getInsertedAt() {
+        return insertedAt;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setInsertedAt(LocalDateTime insertedAt) {
+        this.insertedAt = insertedAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

@@ -1,22 +1,26 @@
 package org.proyectococinav2.domain.model;
 
+import java.time.LocalDateTime;
+
 public class Ingredient {
-    private long id;
+    private Long id;
     private String name;
-    private long supplierId;
+    private Long supplierId;
+    private LocalDateTime insertedAt;
+    private LocalDateTime updatedAt;
 
     public Ingredient() {}
 
-    public Ingredient(long id, String name, long supplierId) {
+    public Ingredient(Long id, String name, Long supplierId) {
         this.id = id;
         this.name = name;
         this.supplierId = supplierId;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getName() {
@@ -25,10 +29,22 @@ public class Ingredient {
     public void setName(String name) {
         this.name = name;
     }
-    public long getSupplierId() {
+    public Long getSupplierId() {
         return supplierId;
     }
-    public void setSupplierId(long supplierId) {
+    public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
+    }
+    public LocalDateTime getInsertedAt() {
+        return insertedAt;
+    }
+    public void setInsertedAt(LocalDateTime insertedAt) {
+        this.insertedAt = insertedAt;
+    }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

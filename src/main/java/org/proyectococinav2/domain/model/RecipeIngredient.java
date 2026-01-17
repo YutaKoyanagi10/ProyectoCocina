@@ -1,29 +1,33 @@
 package org.proyectococinav2.domain.model;
 
+import java.time.LocalDateTime;
+
 public class RecipeIngredient {
-    private long recipeId;
-    private long ingredientId;
+    private Long recipeId;
+    private Long ingredientId;
     private double servingPerPerson;
     private MeasurementUnit unit;
+    private LocalDateTime insertedAt;
+    private LocalDateTime updatedAt;
 
     public RecipeIngredient() {}
 
-    public RecipeIngredient(long recipeId, long ingredientId, double servingPerPerson, MeasurementUnit unit) {
+    public RecipeIngredient(Long recipeId, Long ingredientId, double servingPerPerson, MeasurementUnit unit) {
         this.recipeId = recipeId;
         this.ingredientId = ingredientId;
         this.servingPerPerson = servingPerPerson;
         this.unit = unit;
     }
-    public long getRecipeId() {
+    public Long getRecipeId() {
         return recipeId;
     }
-    public void setRecipeId(long recipeId) {
+    public void setRecipeId(Long recipeId) {
         this.recipeId = recipeId;
     }
-    public long getIngredientId() {
+    public Long getIngredientId() {
         return ingredientId;
     }
-    public void setIngredientId(long ingredientId) {
+    public void setIngredientId(Long ingredientId) {
         this.ingredientId = ingredientId;
     }
     public double getServingPerPerson() {
@@ -37,5 +41,17 @@ public class RecipeIngredient {
     }
     public void setUnit(MeasurementUnit unit) {
         this.unit = unit;
+    }
+    public LocalDateTime getInsertedAt() {
+        return insertedAt;
+    }
+    public void setInsertedAt(LocalDateTime insertedAt) {
+        this.insertedAt = insertedAt;   
+    }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
