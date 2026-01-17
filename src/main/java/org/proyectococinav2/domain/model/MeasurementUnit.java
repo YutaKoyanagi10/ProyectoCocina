@@ -10,8 +10,7 @@ public enum MeasurementUnit {
     CUCHARADA("cda"),
     CUCHARADITA("cdta"),
     TAZA("taza"),
-    UNIDAD("u"),
-    PIZCA("pizca");
+    UNIDAD("u");
 
     private final String abreviatura;
 
