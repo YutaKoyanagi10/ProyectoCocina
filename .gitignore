@@ -48,3 +48,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Local Database ###
+*.db
