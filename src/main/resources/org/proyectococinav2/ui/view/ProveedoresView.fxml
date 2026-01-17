@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" spacing="20" xmlns="http://javafx.com/javafx/17.0.12" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="org.proyectococinav2.ui.controller.ProveedoresViewController">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Lista de Proveedores">
+        <font>
+            <Font name="System Bold" size="28.0" />
+        </font>
+    </Label>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Buscar:" />
+        <TextField fx:id="searchField" promptText="Escribe nombre o contacto..." HBox.hgrow="ALWAYS" />
+    </HBox>
+
+    <TableView fx:id="proveedoresTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID"/>
+            <TableColumn fx:id="nombreColumn" text="Nombre"/>
+            <TableColumn fx:id="contactoColumn" text="Información de Contacto"/>
+            <TableColumn fx:id="fechaAltaColumn" text="Fecha Alta"/>
+            <TableColumn fx:id="fechaModColumn" text="Última Modificación"/>
+            <TableColumn fx:id="accionesColumn" text="Acciones"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+    </TableView>
+</VBox>
