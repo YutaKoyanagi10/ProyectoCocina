@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -20,13 +21,14 @@ public class ProveedorFormViewController {
 
     @FXML private TextField supplierNameField;
     @FXML private TextArea contactInfoArea;
+    @FXML private Label titleLabel;
 
     private final SupplierService supplierService = new SupplierService();
     private Long currentSupplierId = null;
 
     public void setSupplier(SupplierDTO supplier) {
         if (supplier == null) return;
-
+        this.titleLabel.setText("Editar Proveedor");
         this.currentSupplierId = supplier.getId();
 
         Platform.runLater(() -> {

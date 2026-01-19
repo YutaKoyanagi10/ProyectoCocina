@@ -13,7 +13,7 @@
         <padding>
             <Insets top="20.0" bottom="10.0" />
         </padding>
-        <Label text="Formulario de Receta">
+        <Label fx:id="titleLabel" text="Nueva Receta">
             <font>
                 <Font name="System Bold" size="32.0" />
             </font>

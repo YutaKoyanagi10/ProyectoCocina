@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.application.Platform;
@@ -23,6 +24,7 @@ public class IngredienteFormViewController {
 
     @FXML private TextField ingredientNameField;
     @FXML private ComboBox<String> proveedorComboBox;
+    @FXML private Label titleLabel;
 
     private final IngredientService ingredientService = new IngredientService();
     private final SupplierService supplierService = new SupplierService();
@@ -36,19 +38,20 @@ public class IngredienteFormViewController {
     }
 
     public void setIngredient(IngredientDTO ing) {
-    if (ing == null) return;
-    
-    this.currentIngredientId = ing.getId();
-    
-    Platform.runLater(() -> {
-        if (ingredientNameField != null) {
-            ingredientNameField.setText(ing.getName());
-        }
-        if (proveedorComboBox != null) {
-            proveedorComboBox.setValue(ing.getSupplierName());
-        }
-    });
-}
+        if (ing == null) return;
+
+        this.titleLabel.setText("Editar Ingrediente");
+        this.currentIngredientId = ing.getId();
+
+        Platform.runLater(() -> {
+            if (ingredientNameField != null) {
+                ingredientNameField.setText(ing.getName());
+            }
+            if (proveedorComboBox != null) {
+                proveedorComboBox.setValue(ing.getSupplierName());
+            }
+        });
+    }
 
     @FXML
     private void onSaveIngredient() {

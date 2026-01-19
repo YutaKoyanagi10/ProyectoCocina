@@ -25,6 +25,7 @@ public class RecetaFormViewController {
     @FXML private TextField recipeNameField;
     @FXML private TextArea instructionArea;
     @FXML private VBox ingredientBox;
+    @FXML private Label titleLabel;
 
     private final RecipeService recipeService = new RecipeService();
     private final IngredientService ingredientService = new IngredientService();
@@ -81,6 +82,8 @@ public class RecetaFormViewController {
     }
 
     public void setRecipe(RecipeDTO recipe) {
+        if (recipe == null) return;
+        this.titleLabel.setText("Editar Receta");
         this.currentRecipeId = recipe.getId();
         recipeNameField.setText(recipe.getName());
         instructionArea.setText(recipe.getInstructions());
@@ -91,39 +94,39 @@ public class RecetaFormViewController {
     }
 
     private void addRow(RecipeIngredientDTO data) {
-    HBox row = new HBox(15);
-    row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-    row.setPadding(new javafx.geometry.Insets(5));
+        HBox row = new HBox(15);
+        row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        row.setPadding(new javafx.geometry.Insets(5));
 
-    ComboBox<String> combo = new ComboBox<>();
-    combo.setPromptText("Seleccionar ingrediente");
-    HBox.setHgrow(combo, javafx.scene.layout.Priority.ALWAYS);
-    combo.setPrefWidth(200); 
-    combo.setItems(FXCollections.observableArrayList(ingredientService.findAllNames()));
-    HBox.setHgrow(combo, javafx.scene.layout.Priority.ALWAYS);
-    combo.setMaxWidth(Double.MAX_VALUE);
-    
-    Spinner<Double> quantity = new Spinner<>(0.0, 10000.0, 1.0, 0.5);
-    quantity.setEditable(true);
-    quantity.setPrefWidth(100);
+        ComboBox<String> combo = new ComboBox<>();
+        combo.setPromptText("Seleccionar ingrediente");
+        HBox.setHgrow(combo, javafx.scene.layout.Priority.ALWAYS);
+        combo.setPrefWidth(200);
+        combo.setItems(FXCollections.observableArrayList(ingredientService.findAllNames()));
+        HBox.setHgrow(combo, javafx.scene.layout.Priority.ALWAYS);
+        combo.setMaxWidth(Double.MAX_VALUE);
 
-    ComboBox<MeasurementUnit> unit = new ComboBox<>();
-    unit.setPromptText("Unidad");
-    unit.setPrefWidth(120);
-    unit.setItems(FXCollections.observableArrayList(MeasurementUnit.values()));
+        Spinner<Double> quantity = new Spinner<>(0.0, 10000.0, 1.0, 0.5);
+        quantity.setEditable(true);
+        quantity.setPrefWidth(100);
 
-    if (data != null) {
-        combo.setValue(data.getIngredientName());
-        quantity.getValueFactory().setValue(data.getQuantity());
-        unit.setValue(data.getUnit());
+        ComboBox<MeasurementUnit> unit = new ComboBox<>();
+        unit.setPromptText("Unidad");
+        unit.setPrefWidth(120);
+        unit.setItems(FXCollections.observableArrayList(MeasurementUnit.values()));
+
+        if (data != null) {
+            combo.setValue(data.getIngredientName());
+            quantity.getValueFactory().setValue(data.getQuantity());
+            unit.setValue(data.getUnit());
+        }
+
+        Button btnDelete = new Button("Borrar");
+        btnDelete.setOnAction(e -> ingredientBox.getChildren().remove(row));
+
+        row.getChildren().addAll(combo, quantity, unit, btnDelete);
+        ingredientBox.getChildren().add(row);
     }
-
-    Button btnDelete = new Button("Borrar");
-    btnDelete.setOnAction(e -> ingredientBox.getChildren().remove(row));
-
-    row.getChildren().addAll(combo, quantity, unit, btnDelete);
-    ingredientBox.getChildren().add(row);
-}
 
     private void volverAlListado() {
         try {
