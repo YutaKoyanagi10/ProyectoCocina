@@ -80,6 +80,24 @@ public class DataBaseConfig {
                 "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, " +
                 "updated_at DATETIME DEFAULT CURRENT_TIMESTAMP" +
             ");",
+            "CREATE TABLE IF NOT EXISTS weekly_menus (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "start_date DATE NOT NULL," + 
+                "name TEXT," +             
+                "created_at DATETIME DEFAULT CURRENT_TIMESTAMP," +
+                "updated_at DATETIME DEFAULT CURRENT_TIMESTAMP" +
+            ");",
+            "CREATE TABLE IF NOT EXISTS menu_items (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "menu_id INTEGER NOT NULL," +
+                "recipe_id INTEGER NOT NULL," +
+                "day_of_week TEXT NOT NULL," + 
+                "meal_time TEXT NOT NULL," +  
+                "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+                "updated_at DATETIME DEFAULT CURRENT_TIMESTAMP," +
+                "FOREIGN KEY(menu_id) REFERENCES weekly_menus(id) ON DELETE CASCADE," +
+                "FOREIGN KEY(recipe_id) REFERENCES recipes(id) ON DELETE CASCADE" +
+            ");",
         };
 
         try {

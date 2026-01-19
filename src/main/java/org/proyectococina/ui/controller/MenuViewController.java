@@ -89,7 +89,7 @@ public class MenuViewController {
 
     @FXML
     private void onInsertarMenuSemanal() {
-        // Lógica para importar datos
+        loadView("/org/proyectococina/ui/view/MenuSemanalFormView.fxml", "Insertar Menú Semanal");
     }
 
     @FXML
@@ -99,6 +99,6 @@ public class MenuViewController {
 
     @FXML
     private void onMenuSemanal() {
-        // Lógica para mostrar menú semanal
+        loadView("/org/proyectococina/ui/view/MenuSemanalView.fxml", "Menú Semanal");
     }
 }
