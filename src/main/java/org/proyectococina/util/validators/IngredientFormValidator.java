@@ -7,16 +7,14 @@ import javafx.scene.layout.VBox;
 
 public class IngredientFormValidator {
 
-    public static boolean validateDuplicateIngredient(VBox ingredientBox, String newIngredient, ComboBox<?> currentCombo) {
+    public static boolean isDuplicate(VBox ingredientBox, String ingredientName, ComboBox<String> currentCombo) {
+        if (ingredientName == null) return false;
+
         for (Node node : ingredientBox.getChildren()) {
-            if (node instanceof HBox) {
-                for (Node child : ((HBox) node).getChildren()) {
-                    if (child instanceof ComboBox && child != currentCombo) {
-                        ComboBox<?> combo = (ComboBox<?>) child;
-                        Object value = combo.getValue();
-                        if (value != null && value.equals(newIngredient)) {
-                            return true;
-                        }
+            if (node instanceof HBox row) {
+                if (!row.getChildren().isEmpty() && row.getChildren().get(0) instanceof ComboBox<?> combo) {
+                    if (combo != currentCombo && ingredientName.equals(combo.getValue())) {
+                        return true;
                     }
                 }
             }
@@ -24,13 +22,8 @@ public class IngredientFormValidator {
         return false;
     }
 
-    public static boolean validateIngredientFields(String ingredientName, String supplierName) {
-        if (ingredientName == null || ingredientName.trim().isEmpty()) {
-            return false;
-        }
-        if (supplierName == null || supplierName.trim().isEmpty()) {
-            return false;
-        }
-        return true;
+    public static boolean validateIngredientFields(String ingredientName, String instructions) {
+        return ingredientName != null && !ingredientName.trim().isEmpty() 
+            && instructions != null && !instructions.trim().isEmpty();
     }
 }

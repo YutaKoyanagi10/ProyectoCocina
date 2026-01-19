@@ -6,14 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.application.Platform;
+
 import org.proyectococina.domain.dto.RecipeDTO;
 import org.proyectococina.domain.dto.RecipeIngredientDTO;
 import org.proyectococina.domain.model.MeasurementUnit;
 import org.proyectococina.service.RecipeService;
 import org.proyectococina.service.IngredientService;
-import org.proyectococina.util.validators.RecipeFormValidator;
+import org.proyectococina.util.validators.IngredientFormValidator;
 import org.proyectococina.util.alert.ShowAlert;
 
 import java.io.IOException;
@@ -43,14 +46,11 @@ public class RecetaFormViewController {
 
     @FXML
     private void onSaveRecipe() {
-        String nombre = recipeNameField.getText();
-        String instrucciones = instructionArea.getText();
-
-        if (!RecipeFormValidator.validate(nombre, instrucciones, ingredientBox)) {
+        if (!IngredientFormValidator.validateIngredientFields(recipeNameField.getText(), instructionArea.getText())) {
+            ShowAlert.show("Nombre e instrucciones son obligatorios.", Alert.AlertType.WARNING);
             return;
         }
 
-        // 1. Recolectar ingredientes de la UI y convertirlos en DTOs
         List<RecipeIngredientDTO> ingredientsDTO = new ArrayList<>();
         for (var node : ingredientBox.getChildren()) {
             if (node instanceof HBox row) {
@@ -58,22 +58,29 @@ public class RecetaFormViewController {
                 Spinner<Double> spinner = (Spinner<Double>) row.getChildren().get(1);
                 ComboBox<MeasurementUnit> unitCombo = (ComboBox<MeasurementUnit>) row.getChildren().get(2);
 
+                // Sincronizar valor del spinner por si se escribió a mano
                 spinner.increment(0);
 
-                if (combo.getValue() != null && unitCombo.getValue() != null) {
-                    ingredientsDTO.add(new RecipeIngredientDTO(
-                        combo.getValue(),
-                        spinner.getValue(),
-                        unitCombo.getValue()
-                    ));
+                String ingrediente = combo.getValue();
+                if (ingrediente != null && unitCombo.getValue() != null) {
+                    // Doble check de seguridad para duplicados antes de guardar
+                    if (IngredientFormValidator.isDuplicate(ingredientBox, ingrediente, combo)) {
+                        ShowAlert.show("Hay ingredientes duplicados: " + ingrediente, Alert.AlertType.WARNING);
+                        return;
+                    }
+                    
+                    ingredientsDTO.add(new RecipeIngredientDTO(ingrediente, spinner.getValue(), unitCombo.getValue()));
                 }
             }
         }
 
-        RecipeDTO recipeDTO = new RecipeDTO(currentRecipeId, nombre, instrucciones, ingredientsDTO);
+        if (ingredientsDTO.isEmpty()) {
+            ShowAlert.show("La receta debe tener al menos un ingrediente válido.", Alert.AlertType.WARNING);
+            return;
+        }
 
         try {
-            recipeService.save(recipeDTO);
+            recipeService.save(new RecipeDTO(currentRecipeId, recipeNameField.getText(), instructionArea.getText(), ingredientsDTO));
             ShowAlert.show("Receta guardada exitosamente.", Alert.AlertType.INFORMATION);
             volverAlListado();
         } catch (Exception e) {
@@ -81,30 +88,26 @@ public class RecetaFormViewController {
         }
     }
 
-    public void setRecipe(RecipeDTO recipe) {
-        if (recipe == null) return;
-        this.titleLabel.setText("Editar Receta");
-        this.currentRecipeId = recipe.getId();
-        recipeNameField.setText(recipe.getName());
-        instructionArea.setText(recipe.getInstructions());
-        ingredientBox.getChildren().clear();
-        for (RecipeIngredientDTO ri : recipe.getIngredients()) {
-            addRow(ri);
-        }
-    }
-
     private void addRow(RecipeIngredientDTO data) {
         HBox row = new HBox(15);
         row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         row.setPadding(new javafx.geometry.Insets(5));
+        row.setMaxWidth(Double.MAX_VALUE);
 
         ComboBox<String> combo = new ComboBox<>();
-        combo.setPromptText("Seleccionar ingrediente");
-        HBox.setHgrow(combo, javafx.scene.layout.Priority.ALWAYS);
-        combo.setPrefWidth(200);
         combo.setItems(FXCollections.observableArrayList(ingredientService.findAllNames()));
-        HBox.setHgrow(combo, javafx.scene.layout.Priority.ALWAYS);
-        combo.setMaxWidth(Double.MAX_VALUE);
+        combo.setPromptText("Seleccionar ingrediente");
+        combo.setPrefWidth(200);
+
+        HBox.setHgrow(combo, Priority.ALWAYS); 
+        combo.setMaxWidth(Double.MAX_VALUE);    
+        combo.setPrefWidth(200);
+        combo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && IngredientFormValidator.isDuplicate(ingredientBox, newVal, combo)) {
+                ShowAlert.show("El ingrediente '" + newVal + "' ya está en la lista.", Alert.AlertType.WARNING);
+                Platform.runLater(() -> combo.setValue(null));
+            }
+        });
 
         Spinner<Double> quantity = new Spinner<>(0.0, 10000.0, 1.0, 0.5);
         quantity.setEditable(true);
@@ -112,8 +115,8 @@ public class RecetaFormViewController {
 
         ComboBox<MeasurementUnit> unit = new ComboBox<>();
         unit.setPromptText("Unidad");
-        unit.setPrefWidth(120);
         unit.setItems(FXCollections.observableArrayList(MeasurementUnit.values()));
+        unit.setPrefWidth(120);
 
         if (data != null) {
             combo.setValue(data.getIngredientName());
@@ -126,6 +129,18 @@ public class RecetaFormViewController {
 
         row.getChildren().addAll(combo, quantity, unit, btnDelete);
         ingredientBox.getChildren().add(row);
+    }
+
+    public void setRecipe(RecipeDTO recipe) {
+        if (recipe == null) return;
+        this.titleLabel.setText("Editar Receta");
+        this.currentRecipeId = recipe.getId();
+        recipeNameField.setText(recipe.getName());
+        instructionArea.setText(recipe.getInstructions());
+        ingredientBox.getChildren().clear();
+        for (RecipeIngredientDTO ri : recipe.getIngredients()) {
+            addRow(ri);
+        }
     }
 
     private void volverAlListado() {

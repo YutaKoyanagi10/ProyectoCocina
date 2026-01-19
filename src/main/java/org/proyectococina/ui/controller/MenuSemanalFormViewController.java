@@ -104,14 +104,14 @@ public class MenuSemanalFormViewController {
             
             if (seleccion != null && !seleccion.equals(FERIADO_TAG)) {
                 String[] parts = key.split("-");
-                items.add(new MenuItemDTO(null, seleccion, parts[0], parts[1]));
+                items.add(new MenuItemDTO(null, null, seleccion, parts[0], parts[1]));
             }
         });
 
         WeeklyMenuDTO dto = new WeeklyMenuDTO(  
                 currentId,
-                nameField.getText().trim(),
                 startDatePicker.getValue().format(formatter),
+                nameField.getText().trim(),
                 items
         );
 

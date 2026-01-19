@@ -79,7 +79,7 @@ public class WeeklyMenuService implements IService<WeeklyMenuDTO, Long> {
                     .map(r -> r.getName())
                     .orElse("--- FERIADO ---");
 
-            return new MenuItemDTO(item.getId(), recipeName, item.getDayOfWeek(), item.getMealTime());
+            return new MenuItemDTO(item.getId(), item.getRecipeId(), recipeName, item.getDayOfWeek(), item.getMealTime());
         }).collect(Collectors.toList());
 
         // 2. Creamos una lista completa con los 14 espacios (7 días x 2 momentos)
@@ -93,7 +93,7 @@ public class WeeklyMenuService implements IService<WeeklyMenuDTO, Long> {
                 MenuItemDTO coincidencia = itemsExistentes.stream()
                         .filter(i -> i.getDayOfWeek().equals(dia) && i.getMealTime().equals(momento))
                         .findFirst()
-                        .orElse(new MenuItemDTO(null, "--- FERIADO ---", dia, momento)); // Si no está, es Feriado
+                        .orElse(new MenuItemDTO(null, null, "--- FERIADO ---", dia, momento)); // Si no está, es Feriado
 
                 listaCompleta.add(coincidencia);
             }

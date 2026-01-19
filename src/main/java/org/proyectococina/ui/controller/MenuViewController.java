@@ -94,7 +94,7 @@ public class MenuViewController {
 
     @FXML
     private void onExportarListaDeCompras() {
-        // Lógica para exportar datos
+        loadView("/org/proyectococina/ui/view/ListaDeComprasView.fxml", "Lista de Compras");
     }
 
     @FXML

@@ -2,14 +2,16 @@ package org.proyectococina.domain.dto;
 
 public class MenuItemDTO {
     private Long id;
+    private Long recipeId;
     private String recipeName;
     private String dayOfWeek;
     private String mealTime;
 
     public MenuItemDTO() {}
 
-    public MenuItemDTO(Long id, String recipeName, String dayOfWeek, String mealTime) {
+    public MenuItemDTO(Long id, Long recipeId, String recipeName, String dayOfWeek, String mealTime) {
         this.id = id;
+        this.recipeId = recipeId;
         this.recipeName = recipeName;
         this.dayOfWeek = dayOfWeek;
         this.mealTime = mealTime;
@@ -21,6 +23,14 @@ public class MenuItemDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(Long recipeId) {
+        this.recipeId = recipeId;
     }
 
     public String getRecipeName() {

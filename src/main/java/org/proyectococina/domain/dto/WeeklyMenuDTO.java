@@ -76,4 +76,8 @@ public class WeeklyMenuDTO {
         this.updatedAt = updatedAt;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }
