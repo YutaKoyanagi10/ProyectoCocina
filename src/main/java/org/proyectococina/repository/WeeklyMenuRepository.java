@@ -26,7 +26,6 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
         return menu;
     }
 
-    // Método personalizado para guardar el menú con sus platos
     public void saveFullMenu(WeeklyMenu menu, List<MenuItem> items) {
         String sqlMenuInsert = "INSERT INTO weekly_menus (start_date, name) VALUES (?, ?)";
         String sqlMenuUpdate = "UPDATE weekly_menus SET start_date = ?, name = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
@@ -39,7 +38,6 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
             try {
                 long menuId;
                 if (menu.getId() == null) {
-                    // CASO NUEVO: Insertar cabecera
                     try (var pstmtMenu = conn.prepareStatement(sqlMenuInsert, Statement.RETURN_GENERATED_KEYS)) {
                         pstmtMenu.setDate(1, Date.valueOf(menu.getStartDate()));
                         pstmtMenu.setString(2, menu.getName());
@@ -50,7 +48,6 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
                         menuId = rs.getLong(1);
                     }
                 } else {
-                    // CASO EDICIÓN: Actualizar cabecera y limpiar platos anteriores
                     menuId = menu.getId();
                     try (var pstmtMenu = conn.prepareStatement(sqlMenuUpdate)) {
                         pstmtMenu.setDate(1, Date.valueOf(menu.getStartDate()));
@@ -58,14 +55,12 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
                         pstmtMenu.setLong(3, menuId);
                         pstmtMenu.executeUpdate();
                     }
-                    // Borrar platos anteriores para evitar duplicados
                     try (var pstmtDelete = conn.prepareStatement(sqlItemDelete)) {
                         pstmtDelete.setLong(1, menuId);
                         pstmtDelete.executeUpdate();
                     }
                 }
 
-                // INSERTAR PLATOS (Batch)
                 try (var pstmtItem = conn.prepareStatement(sqlItemInsert)) {
                     for (MenuItem item : items) {
                         pstmtItem.setLong(1, menuId);
@@ -83,7 +78,7 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
                 throw e;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al procesar el menú semanal completo", e);
+            throw new RuntimeException("Error processing full weekly menu", e);
         }
     }
 
@@ -100,7 +95,7 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
                 entity.setId(rs.getLong(1));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al guardar WeeklyMenu", e);
+            throw new RuntimeException("Error saving WeeklyMenu", e);
         }
     }
     @Override
@@ -113,7 +108,7 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
             pstmt.setLong(3, entity.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error al actualizar WeeklyMenu", e);
+            throw new RuntimeException("Error updating WeeklyMenu", e);
         }
     }
     @Override
@@ -124,7 +119,7 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
             pstmt.setLong(1, entity.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar WeeklyMenu", e);
+            throw new RuntimeException("Error deleting WeeklyMenu", e);
         }
     }
     @Override
@@ -138,7 +133,7 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
                 list.add(mapResultSetToEntity(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener todos los WeeklyMenu", e);
+            throw new RuntimeException("Error fetching all WeeklyMenus", e);
         }
         return list;
     }
@@ -154,7 +149,7 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al buscar WeeklyMenu por id", e);
+            throw new RuntimeException("Error finding WeeklyMenu by id", e);
         }
         return Optional.empty();
     }
@@ -170,7 +165,7 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al buscar WeeklyMenu por nombre", e);
+            throw new RuntimeException("Error finding WeeklyMenu by name", e);
         }
         return Optional.empty();
     }
@@ -193,7 +188,7 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
                 return rs.next();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al verificar existencia de WeeklyMenu", e);
+            throw new RuntimeException("Error checking existence of WeeklyMenu", e);
         }
     }
 }

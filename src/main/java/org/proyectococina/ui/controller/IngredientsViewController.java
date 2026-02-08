@@ -17,15 +17,15 @@ import org.proyectococina.service.IngredientService;
 
 import java.io.IOException;
 
-public class IngredientesViewController {
+public class IngredientsViewController {
 
-    @FXML private TableView<IngredientDTO> ingredientesTable;
+    @FXML private TableView<IngredientDTO> ingredientsTable;
     @FXML private TableColumn<IngredientDTO, Long> idColumn;
-    @FXML private TableColumn<IngredientDTO, String> nombreColumn;
-    @FXML private TableColumn<IngredientDTO, String> proveedorColumn;
-    @FXML private TableColumn<IngredientDTO, String> fechaAltaColumn; 
-    @FXML private TableColumn<IngredientDTO, String> fechaModColumn; 
-    @FXML private TableColumn<IngredientDTO, Void> accionesColumn;
+    @FXML private TableColumn<IngredientDTO, String> nameColumn;
+    @FXML private TableColumn<IngredientDTO, String> supplierColumn;
+    @FXML private TableColumn<IngredientDTO, String> insertedAtColumn; 
+    @FXML private TableColumn<IngredientDTO, String> updatedAtColumn; 
+    @FXML private TableColumn<IngredientDTO, Void> actionsColumn;
     @FXML private TextField searchField;
 
     private final ObservableList<IngredientDTO> masterData = FXCollections.observableArrayList();
@@ -33,21 +33,21 @@ public class IngredientesViewController {
 
     @FXML
     public void initialize() {
-        configurarColumnas();
-        configurarAcciones();
-        setupFiltrado();
-        cargarDatos();
+        configureColumns();
+        configureActions();
+        setupFiltering();
+        loadData();
     }
 
-    private void configurarColumnas() {
+    private void configureColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nombreColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        proveedorColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
-        fechaAltaColumn.setCellValueFactory(new PropertyValueFactory<>("insertedAt"));
-        fechaModColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
+        insertedAtColumn.setCellValueFactory(new PropertyValueFactory<>("insertedAt"));
+        updatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
     }
 
-    private void setupFiltrado() {
+    private void setupFiltering() {
         FilteredList<IngredientDTO> filteredData = new FilteredList<>(masterData, p -> true);
 
         searchField.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -55,31 +55,30 @@ public class IngredientesViewController {
                 if (newVal == null || newVal.isBlank()) return true;
                 String filter = newVal.toLowerCase();
                 
-                // Filtramos por nombre del ingrediente o nombre del proveedor
                 return (ing.getName() != null && ing.getName().toLowerCase().contains(filter)) ||
                        (ing.getSupplierName() != null && ing.getSupplierName().toLowerCase().contains(filter));
             });
         });
 
         SortedList<IngredientDTO> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(ingredientesTable.comparatorProperty());
-        ingredientesTable.setItems(sortedData);
+        sortedData.comparatorProperty().bind(ingredientsTable.comparatorProperty());
+        ingredientsTable.setItems(sortedData);
     }
 
-    private void cargarDatos() {
+    private void loadData() {
         masterData.setAll(ingredientService.findAll());
     }
 
-    private void configurarAcciones() {
-        accionesColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button btnVer = new Button("Ver");
-            private final Button btnEliminar = new Button("Eliminar");
-            private final HBox box = new HBox(10, btnVer, btnEliminar);
+    private void configureActions() {
+        actionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button viewButton = new Button("Ver");
+            private final Button deleteButton = new Button("Eliminar");
+            private final HBox box = new HBox(10, viewButton, deleteButton);
 
             {
                 box.setAlignment(Pos.CENTER);
-                btnVer.setOnAction(event -> verIngrediente(getTableRow().getItem()));
-                btnEliminar.setOnAction(event -> confirmarEliminacion(getTableRow().getItem()));
+                viewButton.setOnAction(event -> viewIngredient(getTableRow().getItem()));
+                deleteButton.setOnAction(event -> confirmDeletion(getTableRow().getItem()));
             }
 
             @Override
@@ -94,7 +93,7 @@ public class IngredientesViewController {
         });
     }
 
-    private void confirmarEliminacion(IngredientDTO ing) {
+    private void confirmDeletion(IngredientDTO ing) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
             "¿Deseas eliminar el ingrediente '" + ing.getName() + "'? Esto podría afectar a las recetas que lo usan.", 
             ButtonType.YES, ButtonType.NO);
@@ -102,20 +101,20 @@ public class IngredientesViewController {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 ingredientService.delete(ing);
-                cargarDatos();
+                loadData();
             }
         });
     }
 
-    private void verIngrediente(IngredientDTO ing) {
+    private void viewIngredient(IngredientDTO ing) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/IngredienteFormView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/IngredientFormView.fxml"));
             Parent root = loader.load();
 
-            IngredienteFormViewController controller = loader.getController();
+            IngredientFormViewController controller = loader.getController();
             controller.setIngredient(ing);
 
-            StackPane contentArea = (StackPane) ingredientesTable.getScene().lookup("#contentArea");
+            StackPane contentArea = (StackPane) ingredientsTable.getScene().lookup("#contentArea");
             if (contentArea != null) {
                 contentArea.getChildren().setAll(root);
             }

@@ -7,7 +7,7 @@
 
 <VBox prefHeight="700.0" prefWidth="1000.0" spacing="0" xmlns="http://javafx.com/javafx/17.0.12" 
       xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="org.proyectococina.ui.controller.IngredienteFormViewController">
+      fx:controller="org.proyectococina.ui.controller.IngredientFormViewController">
     
     <VBox alignment="CENTER">
         <padding>
@@ -45,7 +45,7 @@
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Label>
-                <ComboBox fx:id="proveedorComboBox" promptText="Selecciona un proveedor" maxWidth="Infinity" prefHeight="45.0" />
+                <ComboBox fx:id="supplierComboBox" promptText="Selecciona un proveedor" maxWidth="Infinity" prefHeight="45.0" />
             </VBox>
         </VBox>
     </VBox>

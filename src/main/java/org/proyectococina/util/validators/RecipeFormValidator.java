@@ -7,12 +7,12 @@ import javafx.scene.layout.VBox;
 import org.proyectococina.util.alert.ShowAlert;
 
 public class RecipeFormValidator {
-    public static boolean validate(String nombre, String instrucciones, VBox ingredientBox) {
-        if (nombre == null || nombre.isBlank()) {
+    public static boolean validate(String name, String instructions, VBox ingredientBox) {
+        if (name == null || name.isBlank()) {
             ShowAlert.show("El nombre de la receta es obligatorio.", Alert.AlertType.ERROR);
             return false;
         }
-        if (instrucciones == null || instrucciones.isBlank()) {
+        if (instructions == null || instructions.isBlank()) {
             ShowAlert.show("Las instrucciones son obligatorias.", Alert.AlertType.ERROR);
             return false;
         }

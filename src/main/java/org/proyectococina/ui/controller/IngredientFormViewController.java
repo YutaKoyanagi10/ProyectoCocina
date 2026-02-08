@@ -20,10 +20,10 @@ import org.proyectococina.util.validators.IngredientFormValidator;
 import java.io.IOException;
 import java.util.List;
 
-public class IngredienteFormViewController {
+public class IngredientFormViewController {
 
     @FXML private TextField ingredientNameField;
-    @FXML private ComboBox<String> proveedorComboBox;
+    @FXML private ComboBox<String> supplierComboBox;
     @FXML private Label titleLabel;
 
     private final IngredientService ingredientService = new IngredientService();
@@ -33,8 +33,8 @@ public class IngredienteFormViewController {
 
     @FXML
     public void initialize() {
-        List<String> proveedores = supplierService.findAllNames();
-        proveedorComboBox.setItems(FXCollections.observableArrayList(proveedores));
+        List<String> suppliers = supplierService.findAllNames();
+        supplierComboBox.setItems(FXCollections.observableArrayList(suppliers));
     }
 
     public void setIngredient(IngredientDTO ing) {
@@ -47,28 +47,28 @@ public class IngredienteFormViewController {
             if (ingredientNameField != null) {
                 ingredientNameField.setText(ing.getName());
             }
-            if (proveedorComboBox != null) {
-                proveedorComboBox.setValue(ing.getSupplierName());
+            if (supplierComboBox != null) {
+                supplierComboBox.setValue(ing.getSupplierName());
             }
         });
     }
 
     @FXML
     private void onSaveIngredient() {
-        String nombre = ingredientNameField.getText();
-        String proveedorNombre = proveedorComboBox.getValue();
+        String name = ingredientNameField.getText();
+        String supplierName = supplierComboBox.getValue();
 
-        if (!IngredientFormValidator.validateIngredientFields(nombre, proveedorNombre)) {
+        if (!IngredientFormValidator.validateIngredientFields(name, supplierName)) {
             ShowAlert.show("Por favor, completa todos los campos.", Alert.AlertType.ERROR);
             return;
         }
 
-        IngredientDTO dto = new IngredientDTO(currentIngredientId, nombre, proveedorNombre);
+        IngredientDTO dto = new IngredientDTO(currentIngredientId, name, supplierName);
 
         try {
             ingredientService.save(dto);
             ShowAlert.show("Ingrediente guardado exitosamente.", Alert.AlertType.INFORMATION);
-            volverAlListado();
+            returnToList();
         } catch (Exception e) {
             ShowAlert.show("Error al guardar: " + e.getMessage(), Alert.AlertType.ERROR);
         }
@@ -76,10 +76,10 @@ public class IngredienteFormViewController {
 
     @FXML
     private void onCancel() {
-        volverAlListado();
+        returnToList();
     }
 
-    private void volverAlListado() {
+    private void returnToList() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/IngredientesView.fxml"));
             Parent root = loader.load();

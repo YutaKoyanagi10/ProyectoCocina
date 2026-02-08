@@ -16,25 +16,21 @@ public class ShoppingListService {
     private final SupplierRepository supplierRepo = new SupplierRepository();
 
     public Map<String, List<ShoppingItemDTO>> calculate(Map<MenuItemDTO, Integer> selections) {
-        // Mapa: Proveedor -> (Ingrediente -> ShoppingItemDTO)
-        // Usamos ShoppingItemDTO directamente para ir acumulando la cantidad
+
         Map<String, Map<String, ShoppingItemDTO>> accumulator = new HashMap<>();
 
-        selections.forEach((item, comensales) -> {
-            if (comensales <= 0) return;
+        selections.forEach((item, diners) -> {
+            if (diners <= 0) return;
 
-            // Buscamos los ingredientes de la receta
             riRepo.findAllByRecipeId(item.getRecipeId()).forEach(ri -> {
-                // 1. Obtener datos del ingrediente y su proveedor
                 var ingredient = ingredientRepo.findById(ri.getIngredientId()).orElseThrow();
                 var supplier = supplierRepo.findById(ingredient.getSupplierId()).orElse(null);
                 
                 String supplierName = (supplier != null) ? supplier.getName() : "Sin Proveedor";
                 String ingName = ingredient.getName();
                 MeasurementUnit unit = ri.getUnit();
-                double amount = ri.getServingPerPerson() * comensales;
+                double amount = ri.getServingPerPerson() * diners;
 
-                // 2. Agrupar y Sumar
                 accumulator.computeIfAbsent(supplierName, k -> new HashMap<>());
                 
                 Map<String, ShoppingItemDTO> supplierItems = accumulator.get(supplierName);
@@ -52,7 +48,6 @@ public class ShoppingListService {
             });
         });
 
-        // 3. Convertir a la estructura final: Map<String, List<ShoppingItemDTO>>
         Map<String, List<ShoppingItemDTO>> finalResult = new HashMap<>();
         accumulator.forEach((supplier, itemsMap) -> {
             finalResult.put(supplier, new ArrayList<>(itemsMap.values()));

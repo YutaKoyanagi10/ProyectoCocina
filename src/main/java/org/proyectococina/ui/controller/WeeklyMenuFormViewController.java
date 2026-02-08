@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-public class MenuSemanalFormViewController {
+public class WeeklyMenuFormViewController {
 
-    private static final String FERIADO_TAG = "--- FERIADO ---";
-    private static final String[] DIAS = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
-    private static final String[] MOMENTOS = {"Almuerzo", "Cena"};
+    private static final String HOLIDAY_TAG = "--- FERIADO ---";
+    private static final String[] DAYS = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
+    private static final String[] MEALS = {"Almuerzo", "Cena"};
 
     @FXML private TextField nameField;
     @FXML private DatePicker startDatePicker;
@@ -42,23 +42,23 @@ public class MenuSemanalFormViewController {
 
     @FXML
     public void initialize() {
-        generarCalendarioBase();
+        generateBaseCalendar();
     }
 
-    private void generarCalendarioBase() {
-        List<String> recetasDisponibles = recipeService.findAllNames();
+    private void generateBaseCalendar() {
+        List<String> availableRecipes = recipeService.findAllNames();
 
-        for (int i = 0; i < DIAS.length; i++) {
-            weeklyGrid.add(new Label(DIAS[i]), i + 1, 0);
+        for (int i = 0; i < DAYS.length; i++) {
+            weeklyGrid.add(new Label(DAYS[i]), i + 1, 0);
         }
 
-        for (int m = 0; m < MOMENTOS.length; m++) {
-            weeklyGrid.add(new Label(MOMENTOS[m]), 0, m + 1);
+        for (int m = 0; m < MEALS.length; m++) {
+            weeklyGrid.add(new Label(MEALS[m]), 0, m + 1);
             
-            for (int d = 0; d < DIAS.length; d++) {
-                ComboBox<String> combo = createRecipeComboBox(recetasDisponibles);
+            for (int d = 0; d < DAYS.length; d++) {
+                ComboBox<String> combo = createRecipeComboBox(availableRecipes);
                 
-                String key = DIAS[d] + "-" + MOMENTOS[m];
+                String key = DAYS[d] + "-" + MEALS[m];
                 menuSelectors.put(key, combo);
                 
                 weeklyGrid.add(combo, d + 1, m + 1);
@@ -66,10 +66,10 @@ public class MenuSemanalFormViewController {
         }
     }
 
-    private ComboBox<String> createRecipeComboBox(List<String> recetas) {
+    private ComboBox<String> createRecipeComboBox(List<String> recipes) {
         ComboBox<String> combo = new ComboBox<>();
-        combo.getItems().add(FERIADO_TAG);
-        combo.getItems().addAll(recetas);
+        combo.getItems().add(HOLIDAY_TAG);
+        combo.getItems().addAll(recipes);
         combo.setPromptText("Elegir...");
         combo.setMaxWidth(Double.MAX_VALUE); 
         return combo;
@@ -95,16 +95,16 @@ public class MenuSemanalFormViewController {
     }
 
     @FXML
-    private void onGuardar() {
-        if (!validarFormulario()) return;
+    private void onSave() {
+        if (!validateForm()) return;
 
         List<MenuItemDTO> items = new ArrayList<>();
         menuSelectors.forEach((key, combo) -> {
-            String seleccion = combo.getValue();
+            String selection = combo.getValue();
             
-            if (seleccion != null && !seleccion.equals(FERIADO_TAG)) {
+            if (selection != null && !selection.equals(HOLIDAY_TAG)) {
                 String[] parts = key.split("-");
-                items.add(new MenuItemDTO(null, null, seleccion, parts[0], parts[1]));
+                items.add(new MenuItemDTO(null, null, selection, parts[0], parts[1]));
             }
         });
 
@@ -118,13 +118,13 @@ public class MenuSemanalFormViewController {
         try {
             menuService.save(dto);
             ShowAlert.show("Menú semanal guardado exitosamente.", Alert.AlertType.INFORMATION);
-            volverAlListado();
+            returnToList();
         } catch (Exception e) {
             ShowAlert.show("Error al guardar el menú semanal: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-    private boolean validarFormulario() {
+    private boolean validateForm() {
         if (!MenuFormValidator.validateFields(nameField.getText(), startDatePicker.getValue())) {
             ShowAlert.show("Por favor, indique nombre y fecha.", Alert.AlertType.WARNING);
             return false;
@@ -138,13 +138,13 @@ public class MenuSemanalFormViewController {
     }
 
     @FXML
-    private void onCancelar() {
-        volverAlListado();
+    private void onCancel() {
+        returnToList();
     }
 
-    private void volverAlListado() {
+    private void returnToList() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/MenuSemanalView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/WeeklyMenuView.fxml"));
             Parent root = loader.load();
             StackPane contentArea = (StackPane) weeklyGrid.getScene().lookup("#contentArea");
             if (contentArea != null) {

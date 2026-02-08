@@ -7,13 +7,13 @@
 
 <VBox alignment="TOP_CENTER" spacing="20" xmlns="http://javafx.com/javafx/17.0.12" 
       xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="org.proyectococina.ui.controller.RecetasViewController">
+      fx:controller="org.proyectococina.ui.controller.IngredientsViewController">
     
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label text="Lista de Recetas">
+    <Label text="Lista de Ingredientes">
         <font>
             <Font name="System Bold" size="28.0" />
         </font>
@@ -21,17 +21,17 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Buscar:" />
-        <TextField fx:id="searchField" promptText="Buscar receta por nombre o instrucción..." HBox.hgrow="ALWAYS" />
+        <TextField fx:id="searchField" promptText="Buscar ingrediente por nombre o proveedor..." HBox.hgrow="ALWAYS" />
     </HBox>
 
-    <TableView fx:id="recetasTable" VBox.vgrow="ALWAYS">
+    <TableView fx:id="ingredientsTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="idColumn" text="ID" />
-            <TableColumn fx:id="nombreColumn" text="Nombre" />
-            <TableColumn fx:id="instruccionColumn" text="Instrucción" />
-            <TableColumn fx:id="fechaAltaColumn" text="Fecha Alta" />
-            <TableColumn fx:id="fechaModColumn" text="Última Modificación" />
-            <TableColumn fx:id="accionesColumn" text="Acciones" />
+            <TableColumn fx:id="nameColumn" text="Nombre" />
+            <TableColumn fx:id="supplierColumn" text="Proveedor" />
+            <TableColumn fx:id="insertedAtColumn" text="Fecha Alta" />
+            <TableColumn fx:id="updatedAtColumn" text="Última Modificación" />
+            <TableColumn fx:id="actionsColumn" text="Acciones" />
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

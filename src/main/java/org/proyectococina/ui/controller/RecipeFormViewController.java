@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecetaFormViewController {
+public class RecipeFormViewController {
 
     @FXML private TextField recipeNameField;
     @FXML private TextArea instructionArea;
@@ -41,7 +41,7 @@ public class RecetaFormViewController {
 
     @FXML
     private void onCancel() {
-        volverAlListado();
+        returnToList();
     }
 
     @FXML
@@ -58,18 +58,16 @@ public class RecetaFormViewController {
                 Spinner<Double> spinner = (Spinner<Double>) row.getChildren().get(1);
                 ComboBox<MeasurementUnit> unitCombo = (ComboBox<MeasurementUnit>) row.getChildren().get(2);
 
-                // Sincronizar valor del spinner por si se escribió a mano
                 spinner.increment(0);
 
-                String ingrediente = combo.getValue();
-                if (ingrediente != null && unitCombo.getValue() != null) {
-                    // Doble check de seguridad para duplicados antes de guardar
-                    if (IngredientFormValidator.isDuplicate(ingredientBox, ingrediente, combo)) {
-                        ShowAlert.show("Hay ingredientes duplicados: " + ingrediente, Alert.AlertType.WARNING);
+                String ingredient = combo.getValue();
+                if (ingredient != null && unitCombo.getValue() != null) {
+                    if (IngredientFormValidator.isDuplicate(ingredientBox, ingredient, combo)) {
+                        ShowAlert.show("Hay ingredientes duplicados: " + ingredient, Alert.AlertType.WARNING);
                         return;
                     }
                     
-                    ingredientsDTO.add(new RecipeIngredientDTO(ingrediente, spinner.getValue(), unitCombo.getValue()));
+                    ingredientsDTO.add(new RecipeIngredientDTO(ingredient, spinner.getValue(), unitCombo.getValue()));
                 }
             }
         }
@@ -82,7 +80,7 @@ public class RecetaFormViewController {
         try {
             recipeService.save(new RecipeDTO(currentRecipeId, recipeNameField.getText(), instructionArea.getText(), ingredientsDTO));
             ShowAlert.show("Receta guardada exitosamente.", Alert.AlertType.INFORMATION);
-            volverAlListado();
+            returnToList();
         } catch (Exception e) {
             ShowAlert.show("Error al guardar: " + e.getMessage(), Alert.AlertType.ERROR);
         }
@@ -143,9 +141,9 @@ public class RecetaFormViewController {
         }
     }
 
-    private void volverAlListado() {
+    private void returnToList() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/RecetasView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/RecipesView.fxml"));
             Parent root = loader.load();
             StackPane contentArea = (StackPane) recipeNameField.getScene().lookup("#contentArea");
             if (contentArea != null) {

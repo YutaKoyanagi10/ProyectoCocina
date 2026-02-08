@@ -42,7 +42,7 @@ public class RecipeService implements IService<RecipeDTO, Long> {
         if (entity.getId() == null) {
             recipeRepo.save(entity);
             Recipe saved = recipeRepo.findByName(entity.getName())
-                    .orElseThrow(() -> new RuntimeException("Error al recuperar receta recién guardada"));
+                    .orElseThrow(() -> new RuntimeException("Error recovering saved recipe: " + entity.getName()));
             saveIngredientsInternal(saved.getId(), dto.getIngredients());
         } else {
             recipeRepo.update(entity);
@@ -64,10 +64,8 @@ public class RecipeService implements IService<RecipeDTO, Long> {
     }
 
     private RecipeDTO mapToDTO(Recipe recipe) {
-        // 1. Obtener las relaciones intermedias
         List<RecipeIngredient> relations = riRepo.findAllByRecipeId(recipe.getId());
 
-        // 2. Mapear relaciones a RecipeIngredientDTO (buscando nombres de ingredientes)
         List<RecipeIngredientDTO> ingredientDTOs = relations.stream().map(ri -> {
             String ingName = ingredientRepo.findById(ri.getIngredientId())
                     .map(ing -> ing.getName())
@@ -80,7 +78,6 @@ public class RecipeService implements IService<RecipeDTO, Long> {
             );
         }).collect(Collectors.toList());
 
-        // 3. Construir el RecipeDTO (asegúrate de que el constructor coincida)
         return new RecipeDTO(
             recipe.getId(),
             recipe.getName(),
@@ -94,7 +91,7 @@ public class RecipeService implements IService<RecipeDTO, Long> {
     private void saveIngredientsInternal(Long recipeId, List<RecipeIngredientDTO> ingredients) {
         for (RecipeIngredientDTO ingDto : ingredients) {
             Long ingId = ingredientRepo.findByName(ingDto.getIngredientName())
-                    .orElseThrow(() -> new RuntimeException("No existe el ingrediente: " + ingDto.getIngredientName()))
+                    .orElseThrow(() -> new RuntimeException("Ingredient does not exist: " + ingDto.getIngredientName()))
                     .getId();
 
             RecipeIngredient ri = new RecipeIngredient();

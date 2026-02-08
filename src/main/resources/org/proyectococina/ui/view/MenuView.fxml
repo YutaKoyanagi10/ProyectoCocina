@@ -21,9 +21,9 @@
                 </VBox.margin>
             </Label>
             
-            <Button fx:id="recetasButton" maxWidth="Infinity" onAction="#onRecetas" text="Recetas" />
-            <Button fx:id="ingredientesButton" maxWidth="Infinity" onAction="#onIngredientes" text="Ingredientes" />
-            <Button fx:id="proveedoresButton" maxWidth="Infinity" onAction="#onProveedores" text="Proveedores" />
+            <Button fx:id="recipesButton" maxWidth="Infinity" onAction="#onRecipes" text="Recetas" />
+            <Button fx:id="ingredientsButton" maxWidth="Infinity" onAction="#onIngredients" text="Ingredientes" />
+            <Button fx:id="suppliersButton" maxWidth="Infinity" onAction="#onSuppliers" text="Proveedores" />
             
             <Label text="Gestión" textFill="#aaaaaa">
                 <VBox.margin>
@@ -31,9 +31,9 @@
                 </VBox.margin>
             </Label>
             
-            <Button fx:id="insertarRecetaButton" maxWidth="Infinity" onAction="#onInsertarReceta" text="Nueva Receta" />
-            <Button fx:id="insertarIngredienteButton" maxWidth="Infinity" onAction="#onInsertarIngrediente" text="Nuevo Ingrediente" />
-            <Button fx:id="insertarProveedorButton" maxWidth="Infinity" onAction="#onInsertarProveedor" text="Nuevo Proveedor" />
+            <Button fx:id="insertRecipeButton" maxWidth="Infinity" onAction="#onInsertRecipe" text="Nueva Receta" />
+            <Button fx:id="insertIngredientButton" maxWidth="Infinity" onAction="#onInsertIngredient" text="Nuevo Ingrediente" />
+            <Button fx:id="insertSupplierButton" maxWidth="Infinity" onAction="#onInsertSupplier" text="Nuevo Proveedor" />
             
             <Label text="Planificación" textFill="#aaaaaa">
                 <VBox.margin>
@@ -41,9 +41,9 @@
                 </VBox.margin>
             </Label>
             
-            <Button fx:id="menuSemanalButton" maxWidth="Infinity" onAction="#onMenuSemanal" text="Menú Semanal" />
-            <Button fx:id="insertarMenuSemanalButton" maxWidth="Infinity" onAction="#onInsertarMenuSemanal" text="Nuevo Menú Semanal" />
-            <Button fx:id="exportarListaDeComprasButton" maxWidth="Infinity" onAction="#onExportarListaDeCompras" text="Lista de Compras" />
+            <Button fx:id="weeklyMenuButton" maxWidth="Infinity" onAction="#onWeeklyMenu" text="Menú Semanal" />
+            <Button fx:id="insertWeeklyMenuButton" maxWidth="Infinity" onAction="#onInsertWeeklyMenu" text="Nuevo Menú Semanal" />
+            <Button fx:id="exportShoppingListButton" maxWidth="Infinity" onAction="#onExportShoppingList" text="Lista de Compras" />
         </VBox>
     </left>
 

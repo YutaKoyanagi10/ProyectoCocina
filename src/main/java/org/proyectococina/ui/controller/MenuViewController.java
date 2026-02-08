@@ -15,27 +15,27 @@ public class MenuViewController {
     @FXML
     private StackPane contentArea;
     @FXML
-    private Button insertarRecetaButton;
+    private Button insertRecipeButton;
     @FXML
-    private Button insertarIngredienteButton;
+    private Button insertIngredientButton;
     @FXML
-    private Button insertarProveedorButton;
+    private Button insertSupplierButton;
     @FXML
-    private Button recetasButton;
+    private Button recipesButton;
     @FXML
-    private Button ingredientesButton;
+    private Button ingredientsButton;
     @FXML
-    private Button proveedoresButton;
+    private Button suppliersButton;
     @FXML
-    private Button insertarMenuSemanalButton;
+    private Button insertWeeklyMenuButton;
     @FXML
-    private Button exportarListaDeComprasButton;
+    private Button exportShoppingListButton;
     @FXML
-    private Button menuSemanalButton;
+    private Button weeklyMenuButton;
 
     @FXML void initialize() {
         Platform.runLater(() -> {
-        onRecetas(); 
+        onRecipes(); 
     });
     }
 
@@ -44,10 +44,8 @@ public class MenuViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // 1. Limpiamos el centro y ponemos la nueva vista
             contentArea.getChildren().setAll(root);
 
-            // 2. Actualizamos el título de la ventana principal (opcional)
             Stage stage = (Stage) contentArea.getScene().getWindow();
             stage.setTitle("Proyecto Cocina - " + title);
 
@@ -58,47 +56,47 @@ public class MenuViewController {
     }
 
     @FXML
-    private void onInsertarReceta() {
-        loadView("/org/proyectococina/ui/view/RecetaFormView.fxml", "Insertar Receta");
+    private void onInsertRecipe() {
+        loadView("/org/proyectococina/ui/view/RecipeFormView.fxml", "Insertar Receta");
     }
 
     @FXML
-    private void onInsertarIngrediente() {
-        loadView("/org/proyectococina/ui/view/IngredienteFormView.fxml", "Insertar Ingrediente");
+    private void onInsertIngredient() {
+        loadView("/org/proyectococina/ui/view/IngredientFormView.fxml", "Insertar Ingrediente");
     }
 
     @FXML
-    private void onInsertarProveedor() {
-        loadView("/org/proyectococina/ui/view/ProveedorFormView.fxml", "Insertar Proveedor");
+    private void onInsertSupplier() {
+        loadView("/org/proyectococina/ui/view/SupplierFormView.fxml", "Insertar Proveedor");
     }
 
     @FXML
-    private void onRecetas() {
-        loadView("/org/proyectococina/ui/view/RecetasView.fxml", "Recetas");
+    private void onRecipes() {
+        loadView("/org/proyectococina/ui/view/RecipesView.fxml", "Recetas");
     }
 
     @FXML
-    private void onIngredientes() {
-        loadView("/org/proyectococina/ui/view/IngredientesView.fxml", "Ingredientes");
+    private void onIngredients() {
+        loadView("/org/proyectococina/ui/view/IngredientsView.fxml", "Ingredientes");
     }
 
     @FXML
-    private void onProveedores() {
-        loadView("/org/proyectococina/ui/view/ProveedoresView.fxml", "Proveedores");
+    private void onSuppliers() {
+        loadView("/org/proyectococina/ui/view/SuppliersView.fxml", "Proveedores");
     }
 
     @FXML
-    private void onInsertarMenuSemanal() {
-        loadView("/org/proyectococina/ui/view/MenuSemanalFormView.fxml", "Insertar Menú Semanal");
+    private void onInsertWeeklyMenu() {
+        loadView("/org/proyectococina/ui/view/WeeklyMenuFormView.fxml", "Insertar Menú Semanal");
     }
 
     @FXML
-    private void onExportarListaDeCompras() {
-        loadView("/org/proyectococina/ui/view/ListaDeComprasView.fxml", "Lista de Compras");
+    private void onExportShoppingList() {
+        loadView("/org/proyectococina/ui/view/ShoppingListView.fxml", "Lista de Compras");
     }
 
     @FXML
-    private void onMenuSemanal() {
-        loadView("/org/proyectococina/ui/view/MenuSemanalView.fxml", "Menú Semanal");
+    private void onWeeklyMenu() {
+        loadView("/org/proyectococina/ui/view/WeeklyMenuView.fxml", "Menú Semanal");
     }
 }

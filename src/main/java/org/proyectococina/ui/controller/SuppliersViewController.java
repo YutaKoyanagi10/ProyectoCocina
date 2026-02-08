@@ -17,39 +17,38 @@ import org.proyectococina.service.SupplierService;
 
 import java.io.IOException;
 
-public class ProveedoresViewController {
+public class SuppliersViewController {
 
-    @FXML private TableView<SupplierDTO> proveedoresTable;
+    @FXML private TableView<SupplierDTO> suppliersTable;
     @FXML private TableColumn<SupplierDTO, Long> idColumn;
-    @FXML private TableColumn<SupplierDTO, String> nombreColumn;
-    @FXML private TableColumn<SupplierDTO, String> contactoColumn;
-    @FXML private TableColumn<SupplierDTO, String> fechaAltaColumn;
-    @FXML private TableColumn<SupplierDTO, String> fechaModColumn;
-    @FXML private TableColumn<SupplierDTO, Void> accionesColumn;
+    @FXML private TableColumn<SupplierDTO, String> nameColumn;
+    @FXML private TableColumn<SupplierDTO, String> contactInfoColumn;
+    @FXML private TableColumn<SupplierDTO, String> insertedAtColumn;
+    @FXML private TableColumn<SupplierDTO, String> updatedAtColumn;
+    @FXML private TableColumn<SupplierDTO, Void> actionsColumn;
     @FXML private TextField searchField;
     private ObservableList<SupplierDTO> masterData = FXCollections.observableArrayList();
     private final SupplierService supplierService = new SupplierService();
 
     @FXML
     public void initialize() {
-        configurarColumnas();
-        configurarAcciones();
-        setupFiltrado();
-        cargarDatos();
+        configureColumns();
+        configureActions();
+        setupFiltering();
+        loadData();
     }
 
-    private void configurarColumnas() {
+    private void configureColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nombreColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        contactoColumn.setCellValueFactory(new PropertyValueFactory<>("contactInfo"));
-        fechaAltaColumn.setCellValueFactory(new PropertyValueFactory<>("insertedAt"));
-        fechaModColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        contactInfoColumn.setCellValueFactory(new PropertyValueFactory<>("contactInfo"));
+        insertedAtColumn.setCellValueFactory(new PropertyValueFactory<>("insertedAt"));
+        updatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
     }
 
-    private void setupFiltrado() {
-        // 1. Crear el filtro envolviendo la masterData
+    private void setupFiltering() {
         FilteredList<SupplierDTO> filteredData = new FilteredList<>(masterData, p -> true);
-        // 2. Escuchar cambios en el buscador
+
         searchField.textProperty().addListener((obs, oldVal, newVal) -> {
             filteredData.setPredicate(supplier -> {
                 if (newVal == null || newVal.isBlank()) return true;
@@ -59,28 +58,27 @@ public class ProveedoresViewController {
                        (supplier.getContactInfo() != null && supplier.getContactInfo().toLowerCase().contains(filter));
             });
         });
-        // 3. Setup de ordenamiento (SortedList)
+ 
         SortedList<SupplierDTO> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(proveedoresTable.comparatorProperty());
+        sortedData.comparatorProperty().bind(suppliersTable.comparatorProperty());
 
-        // 4. Conectar a la tabla
-        proveedoresTable.setItems(sortedData);
+        suppliersTable.setItems(sortedData);
     }
 
-    private void cargarDatos() {
+    private void loadData() {
         masterData.setAll(supplierService.findAll()); 
     }
 
-    private void configurarAcciones() {
-        accionesColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button btnVer = new Button("Ver");
-            private final Button btnEliminar = new Button("Eliminar");
-            private final HBox box = new HBox(10, btnVer, btnEliminar);
+    private void configureActions() {
+        actionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button viewButton = new Button("Ver");
+            private final Button deleteButton = new Button("Eliminar");
+            private final HBox box = new HBox(10, viewButton, deleteButton);
 
             {
                 box.setAlignment(Pos.CENTER);
-                btnVer.setOnAction(event -> verProveedor(getTableRow().getItem()));
-                btnEliminar.setOnAction(event -> eliminarProveedor(getTableRow().getItem()));
+                viewButton.setOnAction(event -> viewSupplier(getTableRow().getItem()));
+                deleteButton.setOnAction(event -> deleteSupplier(getTableRow().getItem()));
             }
 
             @Override
@@ -95,15 +93,15 @@ public class ProveedoresViewController {
         });
     }
 
-    private void verProveedor(SupplierDTO supplier) {
+    private void viewSupplier(SupplierDTO supplier) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/ProveedorFormView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/SupplierFormView.fxml"));
             Parent root = loader.load();
 
-            ProveedorFormViewController controller = loader.getController();
+            SupplierFormViewController controller = loader.getController();
             controller.setSupplier(supplier);
 
-            StackPane contentArea = (StackPane) proveedoresTable.getScene().lookup("#contentArea");
+            StackPane contentArea = (StackPane) suppliersTable.getScene().lookup("#contentArea");
             if (contentArea != null) {
                 contentArea.getChildren().setAll(root);
             }
@@ -112,7 +110,7 @@ public class ProveedoresViewController {
         }
     }
 
-    private void eliminarProveedor(SupplierDTO supplier) {
+    private void deleteSupplier(SupplierDTO supplier) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
             "¿Deseas eliminar al proveedor '" + supplier.getName() + "'? Se borrarán sus ingredientes asociados.", 
             ButtonType.YES, ButtonType.NO);
@@ -120,7 +118,7 @@ public class ProveedoresViewController {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 supplierService.delete(supplier);
-                cargarDatos();
+                loadData();
             }
         });
     }

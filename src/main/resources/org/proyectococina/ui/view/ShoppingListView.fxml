@@ -7,7 +7,7 @@
 
 <VBox alignment="TOP_CENTER" spacing="20" xmlns="http://javafx.com/javafx/17.0.12" 
       xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="org.proyectococina.ui.controller.ListaDeComprasViewController">
+      fx:controller="org.proyectococina.ui.controller.ShoppingListViewController">
     
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -41,7 +41,7 @@
     </ScrollPane>
 
     <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="btnCalcular" text="Generar Lista de Compras" 
-                onAction="#onExportarLista" prefHeight="40.0" prefWidth="250.0" />
+        <Button fx:id="btnCalculate" text="Generar Lista de Compras" 
+                onAction="#onExportShoppingList" prefHeight="40.0" prefWidth="250.0" />
     </HBox>
 </VBox>

@@ -51,7 +51,7 @@ public class WeeklyMenuService implements IService<WeeklyMenuDTO, Long> {
                     item.setMealTime(itemDto.getMealTime());
 
                     Long recipeId = recipeRepo.findByName(itemDto.getRecipeName())
-                            .orElseThrow(() -> new RuntimeException("Receta no encontrada: " + itemDto.getRecipeName()))
+                            .orElseThrow(() -> new RuntimeException("Recipe not found: " + itemDto.getRecipeName()))
                             .getId();
                     item.setRecipeId(recipeId);
                     return item;
@@ -73,8 +73,8 @@ public class WeeklyMenuService implements IService<WeeklyMenuDTO, Long> {
     }
 
     private WeeklyMenuDTO mapToDTO(WeeklyMenu menu) {
-        // 1. Obtenemos los items que SÍ están en la DB
-        List<MenuItemDTO> itemsExistentes = itemRepo.findByMenuId(menu.getId()).stream().map(item -> {
+  
+        List<MenuItemDTO> existingItems = itemRepo.findByMenuId(menu.getId()).stream().map(item -> {
             String recipeName = recipeRepo.findById(item.getRecipeId())
                     .map(r -> r.getName())
                     .orElse("--- FERIADO ---");
@@ -82,20 +82,18 @@ public class WeeklyMenuService implements IService<WeeklyMenuDTO, Long> {
             return new MenuItemDTO(item.getId(), item.getRecipeId(), recipeName, item.getDayOfWeek(), item.getMealTime());
         }).collect(Collectors.toList());
 
-        // 2. Creamos una lista completa con los 14 espacios (7 días x 2 momentos)
-        String[] dias = { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
-        String[] momentos = { "Almuerzo", "Cena" };
-        List<MenuItemDTO> listaCompleta = new ArrayList<>();
+        String[] days = { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+        String[] meals = { "Almuerzo", "Cena" };
+        List<MenuItemDTO> completeList = new ArrayList<>();
 
-        for (String dia : dias) {
-            for (String momento : momentos) {
-                // Buscamos si existe en los datos traídos de la DB
-                MenuItemDTO coincidencia = itemsExistentes.stream()
-                        .filter(i -> i.getDayOfWeek().equals(dia) && i.getMealTime().equals(momento))
+        for (String day : days) {
+            for (String meal : meals) {
+                MenuItemDTO coincidence = existingItems.stream()
+                        .filter(i -> i.getDayOfWeek().equals(day) && i.getMealTime().equals(meal))
                         .findFirst()
-                        .orElse(new MenuItemDTO(null, null, "--- FERIADO ---", dia, momento)); // Si no está, es Feriado
+                        .orElse(new MenuItemDTO(null, null, "--- FERIADO ---", day, meal)); 
 
-                listaCompleta.add(coincidencia);
+                completeList.add(coincidence);
             }
         }
 
@@ -103,7 +101,7 @@ public class WeeklyMenuService implements IService<WeeklyMenuDTO, Long> {
                 menu.getId(),
                 menu.getStartDate().format(dateFormatter),
                 menu.getName(),
-                listaCompleta, // Enviamos la lista con los 14 elementos
+                completeList,
                 menu.getInsertedAt() != null ? menu.getInsertedAt().format(dateTimeFormatter) : "N/A",
                 menu.getUpdatedAt() != null ? menu.getUpdatedAt().format(dateTimeFormatter) : "N/A");
     }

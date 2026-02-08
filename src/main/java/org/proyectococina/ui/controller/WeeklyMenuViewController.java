@@ -17,15 +17,15 @@ import org.proyectococina.service.WeeklyMenuService;
 
 import java.io.IOException;
 
-public class MenuSemanalViewController {
+public class WeeklyMenuViewController {
 
     @FXML private TableView<WeeklyMenuDTO> menuTable;
     @FXML private TableColumn<WeeklyMenuDTO, Long> idColumn;
-    @FXML private TableColumn<WeeklyMenuDTO, String> nombreColumn;
-    @FXML private TableColumn<WeeklyMenuDTO, String> fechaInicioColumn;
-    @FXML private TableColumn<WeeklyMenuDTO, String> fechaAltaColumn; 
-    @FXML private TableColumn<WeeklyMenuDTO, String> fechaModColumn; 
-    @FXML private TableColumn<WeeklyMenuDTO, Void> accionesColumn;
+    @FXML private TableColumn<WeeklyMenuDTO, String> nameColumn;
+    @FXML private TableColumn<WeeklyMenuDTO, String> startDateColumn;
+    @FXML private TableColumn<WeeklyMenuDTO, String> insertedAtColumn; 
+    @FXML private TableColumn<WeeklyMenuDTO, String> updatedAtColumn; 
+    @FXML private TableColumn<WeeklyMenuDTO, Void> actionsColumn;
     @FXML private TextField searchField;
 
     private final ObservableList<WeeklyMenuDTO> masterData = FXCollections.observableArrayList();
@@ -33,21 +33,21 @@ public class MenuSemanalViewController {
 
     @FXML
     public void initialize() {
-        configurarColumnas();
-        configurarAcciones();
-        setupFiltrado();
-        cargarDatos();
+        configureColumns();
+        configureActions();
+        setupFiltering();
+        loadData();
     }
 
-    private void configurarColumnas() {
+    private void configureColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nombreColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        fechaInicioColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        fechaAltaColumn.setCellValueFactory(new PropertyValueFactory<>("insertedAt"));
-        fechaModColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        startDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        insertedAtColumn.setCellValueFactory(new PropertyValueFactory<>("insertedAt"));
+        updatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
     }
 
-    private void setupFiltrado() {
+    private void setupFiltering() {
         FilteredList<WeeklyMenuDTO> filteredData = new FilteredList<>(masterData, p -> true);
 
         searchField.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -65,20 +65,20 @@ public class MenuSemanalViewController {
         menuTable.setItems(sortedData);
     }
 
-    private void cargarDatos() {
+    private void loadData() {
         masterData.setAll(menuService.findAll());
     }
 
-    private void configurarAcciones() {
-        accionesColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button btnVer = new Button("Ver");
-            private final Button btnEliminar = new Button("Eliminar");
-            private final HBox box = new HBox(10, btnVer, btnEliminar);
+    private void configureActions() {
+        actionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button viewButton = new Button("Ver");
+            private final Button deleteButton = new Button("Eliminar");
+            private final HBox box = new HBox(10, viewButton, deleteButton);
 
             {
                 box.setAlignment(Pos.CENTER);
-                btnVer.setOnAction(event -> verMenu(getTableRow().getItem()));
-                btnEliminar.setOnAction(event -> confirmarEliminacion(getTableRow().getItem()));
+                viewButton.setOnAction(event -> viewMenu(getTableRow().getItem()));
+                deleteButton.setOnAction(event -> confirmDeletion(getTableRow().getItem()));
             }
 
             @Override
@@ -93,7 +93,7 @@ public class MenuSemanalViewController {
         });
     }
 
-    private void confirmarEliminacion(WeeklyMenuDTO menu) {
+    private void confirmDeletion(WeeklyMenuDTO menu) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
             "¿Deseas eliminar el menú semanal '" + menu.getName() + "'?", 
             ButtonType.YES, ButtonType.NO);
@@ -101,16 +101,16 @@ public class MenuSemanalViewController {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 menuService.delete(menu);
-                cargarDatos();
+                loadData();
             }
         });
     }
 
-    private void verMenu(WeeklyMenuDTO menu) {
+    private void viewMenu(WeeklyMenuDTO menu) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/MenuSemanalFormView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/WeeklyMenuFormView.fxml"));
             Parent root = loader.load();
-            MenuSemanalFormViewController controller = loader.getController();
+            WeeklyMenuFormViewController controller = loader.getController();
             controller.setMenu(menu);
 
             StackPane contentArea = (StackPane) menuTable.getScene().lookup("#contentArea");
@@ -118,7 +118,7 @@ public class MenuSemanalViewController {
                 contentArea.getChildren().setAll(root);
             }
         } catch (IOException e) {
-            System.err.println("Error al cargar MenuSemanalFormView.fxml");
+            System.err.println("Error al cargar WeeklyMenuFormView.fxml");
             e.printStackTrace();
         }
     }

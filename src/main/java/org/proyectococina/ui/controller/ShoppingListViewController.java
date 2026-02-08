@@ -15,17 +15,19 @@ import org.proyectococina.util.alert.ShowAlert;
 import org.proyectococina.service.ShoppingListService;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListaDeComprasViewController {
+public class ShoppingListViewController {
 
     @FXML private ComboBox<WeeklyMenuDTO> menuSelector;
     @FXML private VBox itemsContainer;
-    @FXML private Button btnCalcular;
+    @FXML private Button btnCalculate;
 
     private final WeeklyMenuService menuService = new WeeklyMenuService();
     private final ShoppingListService calculatorService = new ShoppingListService();
@@ -33,22 +35,19 @@ public class ListaDeComprasViewController {
 
     @FXML
     public void initialize() {
-        // Cargar los menús disponibles en el ComboBox
         menuSelector.getItems().addAll(menuService.findAll());
-        
-        // Listener para cuando cambie el menú seleccionado
+    
         menuSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                cargarPlatosDelMenu(newVal);
+                loadMenuDishes(newVal);
             }
         });
     }
 
-    private void cargarPlatosDelMenu(WeeklyMenuDTO menu) {
+    private void loadMenuDishes(WeeklyMenuDTO menu) {
         itemsContainer.getChildren().clear();
         servingInputs.clear();
-
-        // Filtramos para que solo aparezcan platos que tienen una receta asignada
+     
         menu.getItems().stream()
                 .filter(item -> item.getRecipeName() != null && !item.getRecipeName().equals("--- FERIADO ---"))
                 .forEach(item -> {
@@ -60,7 +59,6 @@ public class ListaDeComprasViewController {
                             item.getDayOfWeek(), item.getMealTime(), item.getRecipeName()));
                     label.setPrefWidth(350);
 
-                    // Selector numérico
                     Spinner<Integer> spinner = new Spinner<>(0, 100, 1);
                     spinner.setEditable(true);
                     spinner.setPrefWidth(80);
@@ -72,7 +70,7 @@ public class ListaDeComprasViewController {
     }
 
     @FXML
-    private void onExportarLista() {
+    private void onExportShoppingList() {
         if (servingInputs.isEmpty()) {
             ShowAlert.show("No hay un menú cargado.", Alert.AlertType.WARNING);
             return;
@@ -81,9 +79,9 @@ public class ListaDeComprasViewController {
         Map<MenuItemDTO, Integer> selections = new HashMap<>();
         servingInputs.forEach((item, spinner) -> {
             spinner.increment(0);
-            int comensales = spinner.getValue();
-            if (comensales > 0)
-                selections.put(item, comensales);
+            int diners = spinner.getValue();
+            if (diners > 0)
+                selections.put(item, diners);
         });
 
         if (selections.isEmpty()) {
@@ -91,11 +89,11 @@ public class ListaDeComprasViewController {
             return;
         }
 
-        Map<String, List<ShoppingItemDTO>> resultado = calculatorService.calculate(selections);
-        ejecutarExportacion(resultado);
+        Map<String, List<ShoppingItemDTO>> result = calculatorService.calculate(selections);
+        executeExport(result);
     }
 
-    private void ejecutarExportacion(Map<String, List<ShoppingItemDTO>> resultado) {
+    private void executeExport(Map<String, List<ShoppingItemDTO>> result) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar Lista de Compras");
         fileChooser.setInitialFileName("Lista_Compras_" + LocalDate.now() + ".txt");
@@ -105,12 +103,11 @@ public class ListaDeComprasViewController {
 
         if (file != null) {
             try (PrintWriter writer = new java.io.PrintWriter(file)) {
-                escribirEncabezado(writer);
-                resultado.forEach((proveedor, items) -> {
-                    writer.println("PROVEEDOR: " + proveedor.toUpperCase());
+                writeHeader(writer);
+                result.forEach((supplier, items) -> {
+                    writer.println("PROVEEDOR: " + supplier.toUpperCase());
                     writer.println("------------------------------------------");
                     for (ShoppingItemDTO item : items) {
-                        // Mejora 2: Formateo de cantidades (quita .00 si es entero)
                         String cantStr = (item.totalAmount() == (long) item.totalAmount())
                                 ? String.format("%d", (long) item.totalAmount())
                                 : String.format("%.2f", item.totalAmount());
@@ -120,21 +117,19 @@ public class ListaDeComprasViewController {
                     writer.println();
                 });
                 ShowAlert.show("Guardado con éxito.", Alert.AlertType.INFORMATION);
-            } catch (java.io.IOException e) {
+            } catch (IOException e) {
                 ShowAlert.show("Error: " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }
     
-    private void escribirEncabezado(java.io.PrintWriter writer) {
+    private void writeHeader(java.io.PrintWriter writer) {
         
-        String fechaActual = LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
+        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         writer.println("==================================================");
         writer.println("           LISTA DE COMPRAS CALCULADA             ");
         writer.println("==================================================");
-        writer.println(" Generada el: " + fechaActual);
-        writer.println(" Nota: Cantidades basadas en comensales ingresados.");
+        writer.println(" Generada el: " + currentDate);
         writer.println("==================================================\n");
     }
 }

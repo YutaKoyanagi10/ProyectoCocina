@@ -17,7 +17,7 @@ import org.proyectococina.service.SupplierService;
 import org.proyectococina.util.alert.ShowAlert;
 import org.proyectococina.util.validators.SupplierFormValidator;
 
-public class ProveedorFormViewController {
+public class SupplierFormViewController {
 
     @FXML private TextField supplierNameField;
     @FXML private TextArea contactInfoArea;
@@ -43,20 +43,20 @@ public class ProveedorFormViewController {
 
     @FXML
     private void onSaveSupplier() {
-        String nombre = supplierNameField.getText();
-        String contacto = contactInfoArea.getText();
+        String name = supplierNameField.getText();
+        String contact = contactInfoArea.getText();
 
-        if (!SupplierFormValidator.validate(nombre, contacto)) {
+        if (!SupplierFormValidator.validate(name, contact)) {
             ShowAlert.show("Por favor, completa todos los campos del proveedor.", Alert.AlertType.ERROR);
             return;
         }
 
-        SupplierDTO dto = new SupplierDTO(currentSupplierId, nombre, contacto);
+        SupplierDTO dto = new SupplierDTO(currentSupplierId, name, contact);
 
         try {
             supplierService.save(dto);
             ShowAlert.show("Proveedor guardado exitosamente.", Alert.AlertType.INFORMATION);
-            volverAlListado();
+            returnToList();
         } catch (Exception e) {
             ShowAlert.show("Error al guardar el proveedor: " + e.getMessage(), Alert.AlertType.ERROR);
         }
@@ -64,12 +64,12 @@ public class ProveedorFormViewController {
 
     @FXML
     private void onCancel() {
-        volverAlListado();
+        returnToList();
     }
 
-    private void volverAlListado() {
+    private void returnToList() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/ProveedoresView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/SuppliersView.fxml"));
             Parent root = loader.load();
             
             StackPane contentArea = (StackPane) supplierNameField.getScene().lookup("#contentArea");

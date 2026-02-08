@@ -21,7 +21,6 @@ public class SupplierRepository implements IRepository<Supplier, Long> {
         supplier.setName(rs.getString("name"));
         supplier.setContactInfo(rs.getString("contact_info"));
 
-        // Mapeo de campos de auditoría
         Timestamp createdAt = rs.getTimestamp("created_at");
         Timestamp updatedAt = rs.getTimestamp("updated_at");
 

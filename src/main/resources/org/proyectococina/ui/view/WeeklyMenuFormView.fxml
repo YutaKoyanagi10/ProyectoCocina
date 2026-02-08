@@ -7,7 +7,7 @@
 
 <VBox alignment="TOP_CENTER" spacing="20" xmlns="http://javafx.com/javafx/17.0.12" 
       xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="org.proyectococina.ui.controller.MenuSemanalFormViewController">
+      fx:controller="org.proyectococina.ui.controller.WeeklyMenuFormViewController">
     
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -37,7 +37,7 @@
     </ScrollPane>
 
     <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="btnGuardar" text="Guardar" onAction="#onGuardar" prefWidth="200" />
-        <Button fx:id="btnCancelar" text="Cancelar" onAction="#onCancelar" prefWidth="200" />
+        <Button fx:id="btnSave" text="Guardar" onAction="#onSave" prefWidth="200" />
+        <Button fx:id="btnCancel" text="Cancelar" onAction="#onCancel" prefWidth="200" />
     </HBox>
 </VBox>

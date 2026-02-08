@@ -7,7 +7,7 @@
 
 <VBox alignment="TOP_CENTER" spacing="20" xmlns="http://javafx.com/javafx/17.0.12" 
       xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="org.proyectococina.ui.controller.MenuSemanalViewController">
+      fx:controller="org.proyectococina.ui.controller.WeeklyMenuViewController">
     
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -27,11 +27,11 @@
     <TableView fx:id="menuTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="idColumn" text="ID" prefWidth="50" />
-            <TableColumn fx:id="nombreColumn" text="Nombre del Menú" prefWidth="200" />
-            <TableColumn fx:id="fechaInicioColumn" text="Fecha Inicio (Lunes)" prefWidth="150" />
-            <TableColumn fx:id="fechaAltaColumn" text="Fecha Alta" prefWidth="150" />
-            <TableColumn fx:id="fechaModColumn" text="Última Modificación" prefWidth="150" />
-            <TableColumn fx:id="accionesColumn" text="Acciones" prefWidth="200" />
+            <TableColumn fx:id="nameColumn" text="Nombre del Menú" prefWidth="200" />
+            <TableColumn fx:id="startDateColumn" text="Fecha Inicio (Lunes)" prefWidth="150" />
+            <TableColumn fx:id="insertedAtColumn" text="Fecha Alta" prefWidth="150" />
+            <TableColumn fx:id="updatedAtColumn" text="Última Modificación" prefWidth="150" />
+            <TableColumn fx:id="actionsColumn" text="Acciones" prefWidth="200" />
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -1,11 +1,11 @@
 package org.proyectococina.util.validators;
 
 public class SupplierFormValidator {
-    public static boolean validate(String nombre, String contacto) {
-        if (nombre == null || nombre.isBlank()) {
+    public static boolean validate(String name, String contact) {
+        if (name == null || name.isBlank()) {
             return false;
         }
-        if (contacto == null || contacto.isBlank()) {
+        if (contact == null || contact.isBlank()) {
             return false;
         }
         return true;

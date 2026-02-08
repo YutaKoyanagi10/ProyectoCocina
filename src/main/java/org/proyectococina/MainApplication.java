@@ -27,7 +27,7 @@ public class MainApplication extends Application {
     }
 
     public static void main(String[] args) {
-        // Crear la base de datos y las tablas si no existen
+
         DataBaseConfig.getInstance().createTables();
         launch(args);
     }

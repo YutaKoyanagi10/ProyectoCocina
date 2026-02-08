@@ -29,12 +29,12 @@ public class RecipeIngredientRepository {
 
     public void save(RecipeIngredient entity) {
         String sql = "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, serving_per_person, unit) VALUES (?, ?, ?, ?)";
-        ejecutarUpdate(sql, entity.getRecipeId(), entity.getIngredientId(), entity.getServingPerPerson(), entity.getUnit().name());
+        executeUpdate(sql, entity.getRecipeId(), entity.getIngredientId(), entity.getServingPerPerson(), entity.getUnit().name());
     }
 
     public void deleteAllByRecipeId(Long recipeId) {
         String sql = "DELETE FROM recipe_ingredients WHERE recipe_id = ?";
-        ejecutarUpdate(sql, recipeId);
+        executeUpdate(sql, recipeId);
     }
 
     public List<RecipeIngredient> findAllByRecipeId(Long recipeId) {
@@ -49,12 +49,12 @@ public class RecipeIngredientRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al buscar ingredientes de la receta: " + recipeId, e);
+            throw new RuntimeException("Error searching ingredients for recipe: " + recipeId, e);
         }
         return list;
     }
 
-    private void ejecutarUpdate(String sql, Object... params) {
+    private void executeUpdate(String sql, Object... params) {
         try (var conn = DataBaseConfig.getInstance().getConnection();
              var pstmt = conn.prepareStatement(sql)) {
             for (int i = 0; i < params.length; i++) {
@@ -62,7 +62,7 @@ public class RecipeIngredientRepository {
             }
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error ejecutando update en RecipeIngredient", e);
+            throw new RuntimeException("Error executing update in RecipeIngredient", e);
         }
     }
 }
