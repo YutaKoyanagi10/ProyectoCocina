@@ -23,6 +23,7 @@ jobs:
       uses: gradle/gradle-build-action@v3
       with:
         arguments: shadowJar
+        build-root-directory: ProyectoCocina
 
     - name: Create Installer with jpackage
       shell: bash
