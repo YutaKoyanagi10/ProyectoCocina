@@ -19,14 +19,12 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    # Dejamos que la acción busque el wrapper por su cuenta en todo el repo
     - name: Build with Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
-        gradle-version: wrapper # Esto fuerza a usar el gradlew que encuentre
+        gradle-version: wrapper 
 
     - name: Run ShadowJar
-      # Usamos shell bash para que el comando ./gradlew sea universal
       shell: bash
       run: |
         # Buscamos gradlew recursivamente y lo ejecutamos
@@ -50,7 +48,8 @@ jobs:
           --main-class org.proyectococina.Launcher \
           --type exe \
           --win-shortcut \
-          --win-menu
+          --win-menu \
+          --icon "src/main/resources/icon.ico"
           
     - name: Upload EXE Artifact
       uses: actions/upload-artifact@v4
