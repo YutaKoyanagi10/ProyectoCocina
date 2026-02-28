@@ -3,7 +3,7 @@ name: Generate Windows Installer (.exe)
 on:
   push:
     branches: [ "main", "master" ]
-  workflow_dispatch: # Allows manual execution from the GitHub Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,26 +19,20 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-
-    - name: Build Shadow JAR
-      shell: bash
-      run: |
-        GRADLEW_PATH=$(find . -name gradlew -type f -printf '%h' -quit)
-        cd "$GRADLEW_PATH"
-        chmod +x gradlew
-        ./gradlew shadowJar
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v3
+      with:
+        arguments: shadowJar
 
     - name: Create Installer with jpackage
       shell: bash
       run: |
-        JAR_PATH=$(find . -name "ProyectoCocina-*-all.jar" -type f -quit)
+        JAR_PATH=$(find . -name "*all.jar" -type f | head -n 1)
         JAR_DIR=$(dirname "$JAR_PATH")
         JAR_NAME=$(basename "$JAR_PATH")
         
         jpackage \
-          --name "KitchenProject" \
+          --name "Proyecto Cocina" \
           --input "$JAR_DIR" \
           --main-jar "$JAR_NAME" \
           --main-class org.proyectococina.Launcher \
