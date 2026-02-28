@@ -2,9 +2,6 @@
 .gradle/
 gradle-app.setting
 gradle-app.setting.bak
-gradlew
-gradlew.bat
-gradle/
 !gradle/wrapper/gradle-wrapper.jar
 .gradle-local/
 *.log
