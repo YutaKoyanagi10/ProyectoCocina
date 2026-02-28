@@ -19,15 +19,26 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
+    # Dejamos que la acción busque el wrapper por su cuenta en todo el repo
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
-        arguments: shadowJar
-        build-root-directory: ProyectoCocina
+        gradle-version: wrapper # Esto fuerza a usar el gradlew que encuentre
+
+    - name: Run ShadowJar
+      # Usamos shell bash para que el comando ./gradlew sea universal
+      shell: bash
+      run: |
+        # Buscamos gradlew recursivamente y lo ejecutamos
+        GRADLEW_PATH=$(find . -name gradlew -type f -printf '%h' -quit)
+        cd "$GRADLEW_PATH"
+        chmod +x gradlew
+        ./gradlew shadowJar
 
     - name: Create Installer with jpackage
       shell: bash
       run: |
+        # Buscamos el JAR generado
         JAR_PATH=$(find . -name "*all.jar" -type f | head -n 1)
         JAR_DIR=$(dirname "$JAR_PATH")
         JAR_NAME=$(basename "$JAR_PATH")
@@ -39,9 +50,8 @@ jobs:
           --main-class org.proyectococina.Launcher \
           --type exe \
           --win-shortcut \
-          --win-menu \
-          --icon src/main/resources/icon.ico
-
+          --win-menu
+          
     - name: Upload EXE Artifact
       uses: actions/upload-artifact@v4
       with:
