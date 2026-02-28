@@ -23,7 +23,10 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
 
     - name: Build Shadow JAR
-      run: .\gradlew.bat shadowJar
+      shell: bash
+      run: |
+        chmod +x gradlew
+        ./gradlew shadowJar
 
     - name: Create Installer with jpackage
       run: |
