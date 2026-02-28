@@ -23,12 +23,14 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
 
     - name: Build Shadow JAR
+      working-directory: ./ProyectoCocina
       shell: bash
       run: |
         chmod +x gradlew
         ./gradlew shadowJar
 
     - name: Create Installer with jpackage
+      working-directory: ./ProyectoCocina
       run: |
         jpackage `
           --name "KitchenProject" `
