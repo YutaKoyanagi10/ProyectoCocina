@@ -29,22 +29,28 @@ public class MenuItemRepository implements IRepository<MenuItem, Long> {
     }
 
     @Override
-    public void save(MenuItem entity) {
+    public MenuItem save(MenuItem entity) {
         String sql = "INSERT INTO menu_items (menu_id, recipe_id, day_of_week, meal_time) VALUES (?, ?, ?, ?)";
         try (var conn = DataBaseConfig.getInstance().getConnection();
-             var pstmt = conn.prepareStatement(sql)) {
+             var pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setLong(1, entity.getMenuId());
             pstmt.setLong(2, entity.getRecipeId());
             pstmt.setString(3, entity.getDayOfWeek());
             pstmt.setString(4, entity.getMealTime());
             pstmt.executeUpdate();
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1));
+                }
+            }
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException("Error saving menu item", e);
         }
     }
 
     @Override
-    public void update(MenuItem entity) {
+    public MenuItem update(MenuItem entity) {
         String sql = "UPDATE menu_items SET recipe_id = ?, day_of_week = ?, meal_time = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         try (var conn = DataBaseConfig.getInstance().getConnection();
              var pstmt = conn.prepareStatement(sql)) {
@@ -52,7 +58,11 @@ public class MenuItemRepository implements IRepository<MenuItem, Long> {
             pstmt.setString(2, entity.getDayOfWeek());
             pstmt.setString(3, entity.getMealTime());
             pstmt.setLong(4, entity.getId());
-            pstmt.executeUpdate();
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("cant be updated: the menu item ID " + entity.getId() + " doesnt exist.");
+            }
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException("Error updating menu item ID: " + entity.getId(), e);
         }

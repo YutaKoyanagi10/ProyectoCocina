@@ -11,9 +11,23 @@ import java.util.*;
 
 public class ShoppingListService {
 
-    private final RecipeIngredientRepository riRepo = new RecipeIngredientRepository();
-    private final IngredientRepository ingredientRepo = new IngredientRepository();
-    private final SupplierRepository supplierRepo = new SupplierRepository();
+    private final RecipeIngredientRepository riRepo;
+    private final IngredientRepository ingredientRepo;
+    private final SupplierRepository supplierRepo;
+
+    public ShoppingListService() {
+        this.riRepo = new RecipeIngredientRepository();
+        this.ingredientRepo = new IngredientRepository();
+        this.supplierRepo = new SupplierRepository();
+    }
+
+    public ShoppingListService(RecipeIngredientRepository riRepo, 
+                               IngredientRepository ingredientRepo, 
+                               SupplierRepository supplierRepo) {
+        this.riRepo = riRepo;
+        this.ingredientRepo = ingredientRepo;
+        this.supplierRepo = supplierRepo;
+    }
 
     public Map<String, List<ShoppingItemDTO>> calculate(Map<MenuItemDTO, Integer> selections) {
 

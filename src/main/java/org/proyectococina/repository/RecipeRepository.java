@@ -55,27 +55,40 @@ public class RecipeRepository implements IRepository<Recipe, Long> {
     }
 
     @Override
-    public void save(Recipe entity) {
+    public Recipe save(Recipe entity) {
         String sql = "INSERT INTO RECIPES (NAME, INSTRUCTIONS) VALUES (?, ?)";
-         try (var connection = DataBaseConfig.getInstance().getConnection();
-              var preparedStatement = connection.prepareStatement(sql)) {
-             preparedStatement.setString(1, entity.getName());
-             preparedStatement.setString(2, entity.getInstructions());
-             preparedStatement.executeUpdate();
-         } catch (Exception e) {
-             throw new RuntimeException("Error saving recipe: " + entity, e);
-         }
+        try (var connection = DataBaseConfig.getInstance().getConnection();
+            var preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setString(2, entity.getInstructions());
+            preparedStatement.executeUpdate();
+
+            try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1));
+                }
+            }
+            return entity;
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving recipe: " + entity, e);
+        }
     }
 
     @Override
-    public void update(Recipe entity) {
+    public Recipe update(Recipe entity) {
         String sql = "UPDATE RECIPES SET NAME = ?, INSTRUCTIONS = ?, updated_at = CURRENT_TIMESTAMP WHERE ID = ?";
         try (var connection = DataBaseConfig.getInstance().getConnection();
-             var preparedStatement = connection.prepareStatement(sql)) {
+            var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getInstructions());
             preparedStatement.setLong(3, entity.getId());
-            preparedStatement.executeUpdate();
+            int rowsAffected = preparedStatement.executeUpdate();
+        
+            if (rowsAffected == 0) {
+                throw new RuntimeException("cant be updated: the recipe ID " + entity.getId() + " doesnt exist.");
+            }
+        
+            return entity;
         } catch (Exception e) {
             throw new RuntimeException("Error updating recipe", e);
         }

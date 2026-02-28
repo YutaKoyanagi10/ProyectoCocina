@@ -17,11 +17,23 @@ import java.util.stream.Collectors;
 
 public class WeeklyMenuService implements IService<WeeklyMenuDTO, Long> {
 
-    private final WeeklyMenuRepository menuRepo = new WeeklyMenuRepository();
-    private final MenuItemRepository itemRepo = new MenuItemRepository();
-    private final RecipeRepository recipeRepo = new RecipeRepository();
+    private final WeeklyMenuRepository menuRepo;
+    private final MenuItemRepository itemRepo;
+    private final RecipeRepository recipeRepo;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    public WeeklyMenuService() {
+        this.menuRepo = new WeeklyMenuRepository();
+        this.itemRepo = new MenuItemRepository();
+        this.recipeRepo = new RecipeRepository();
+    }
+
+    public WeeklyMenuService(WeeklyMenuRepository menuRepo, MenuItemRepository itemRepo, RecipeRepository recipeRepo) {
+        this.menuRepo = menuRepo;
+        this.itemRepo = itemRepo;
+        this.recipeRepo = recipeRepo;
+    }
 
     @Override
     public List<WeeklyMenuDTO> findAll() {

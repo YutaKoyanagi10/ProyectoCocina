@@ -83,30 +83,36 @@ public class WeeklyMenuRepository implements IRepository<WeeklyMenu, Long> {
     }
 
     @Override
-    public void save(WeeklyMenu entity) {
+    public WeeklyMenu save(WeeklyMenu entity) {
         String sql = "INSERT INTO weekly_menus (start_date, name) VALUES (?, ?)";
         try (var conn = DataBaseConfig.getInstance().getConnection();
              var pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setDate(1, Date.valueOf(entity.getStartDate()));
             pstmt.setString(2, entity.getName());
             pstmt.executeUpdate();
-            var rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                entity.setId(rs.getLong(1));
+            try (var rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1));
+                }
             }
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException("Error saving WeeklyMenu", e);
         }
     }
     @Override
-    public void update(WeeklyMenu entity) {
+    public WeeklyMenu update(WeeklyMenu entity) {
         String sql = "UPDATE weekly_menus SET start_date = ?, name = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         try (var conn = DataBaseConfig.getInstance().getConnection();
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setDate(1, Date.valueOf(entity.getStartDate()));
             pstmt.setString(2, entity.getName());
             pstmt.setLong(3, entity.getId());
-            pstmt.executeUpdate();
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("cant be updated: the WeeklyMenu ID " + entity.getId() + " doesnt exist.");
+            }
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException("Error updating WeeklyMenu", e);
         }

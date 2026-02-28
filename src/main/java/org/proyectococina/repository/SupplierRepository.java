@@ -31,27 +31,37 @@ public class SupplierRepository implements IRepository<Supplier, Long> {
     }
 
     @Override
-    public void save(Supplier entity) {
+    public Supplier save(Supplier entity) {
         String sql = "INSERT INTO suppliers (name, contact_info) VALUES (?, ?)";
         try (var conn = DataBaseConfig.getInstance().getConnection();
-             var pstmt = conn.prepareStatement(sql)) {
+             var pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, entity.getName());
             pstmt.setString(2, entity.getContactInfo());
             pstmt.executeUpdate();
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1));
+                }
+            }
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException("Error saving supplier: " + entity.getName(), e);
         }
     }
 
     @Override
-    public void update(Supplier entity) {
+    public Supplier update(Supplier entity) {
         String sql = "UPDATE suppliers SET name = ?, contact_info = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         try (var conn = DataBaseConfig.getInstance().getConnection();
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, entity.getName());
             pstmt.setString(2, entity.getContactInfo());
             pstmt.setLong(3, entity.getId());
-            pstmt.executeUpdate();
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("cant be updated: the supplier ID " + entity.getId() + " doesnt exist.");
+            }
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException("Error updating supplier ID: " + entity.getId(), e);
         }

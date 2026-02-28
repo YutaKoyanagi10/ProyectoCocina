@@ -12,9 +12,19 @@ import java.util.stream.Collectors;
 
 public class IngredientService implements IService<IngredientDTO, Long> {
 
-    private final IngredientRepository ingredientRepo = new IngredientRepository();
-    private final SupplierRepository supplierRepo = new SupplierRepository();
+    private final IngredientRepository ingredientRepo;
+    private final SupplierRepository supplierRepo;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    public IngredientService() {
+        this.ingredientRepo = new IngredientRepository();
+        this.supplierRepo = new SupplierRepository();
+    }
+
+    public IngredientService(IngredientRepository ingredientRepo, SupplierRepository supplierRepo) {
+        this.ingredientRepo = ingredientRepo;
+        this.supplierRepo = supplierRepo;
+    }
 
     @Override
     public List<IngredientDTO> findAll() {
@@ -32,8 +42,12 @@ public class IngredientService implements IService<IngredientDTO, Long> {
         entity.setId(dto.getId());
         entity.setName(dto.getName());
 
-        supplierRepo.findByName(dto.getSupplierName())
-                .ifPresent(s -> entity.setSupplierId(s.getId()));
+        if (dto.getSupplierName() != null && !dto.getSupplierName().isEmpty()) {
+            Long supplierId = supplierRepo.findByName(dto.getSupplierName())
+                    .orElseThrow(() -> new RuntimeException("El proveedor no existe: " + dto.getSupplierName()))
+                    .getId();
+            entity.setSupplierId(supplierId);
+        }
 
         if (entity.getId() == null) {
             ingredientRepo.save(entity);

@@ -15,11 +15,25 @@ import java.util.stream.Collectors;
 
 public class RecipeService implements IService<RecipeDTO, Long> {
 
-    private final RecipeRepository recipeRepo = new RecipeRepository();
-    private final RecipeIngredientRepository riRepo = new RecipeIngredientRepository();
-    private final IngredientRepository ingredientRepo = new IngredientRepository();
+    private final RecipeRepository recipeRepo;
+    private final RecipeIngredientRepository riRepo;
+    private final IngredientRepository ingredientRepo;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
+    public RecipeService() {
+        recipeRepo = new RecipeRepository();
+        riRepo = new RecipeIngredientRepository();
+        ingredientRepo = new IngredientRepository();
+    }
+
+    public RecipeService(RecipeRepository recipeRepo, 
+                         RecipeIngredientRepository riRepo, 
+                         IngredientRepository ingredientRepo) {
+        this.recipeRepo = recipeRepo;
+        this.riRepo = riRepo;
+        this.ingredientRepo = ingredientRepo;
+    }
+    
     @Override
     public List<RecipeDTO> findAll() {
         return recipeRepo.findAll().stream()
@@ -39,16 +53,17 @@ public class RecipeService implements IService<RecipeDTO, Long> {
         entity.setName(dto.getName());
         entity.setInstructions(dto.getInstructions());
 
+        Long recipeId;
+
         if (entity.getId() == null) {
-            recipeRepo.save(entity);
-            Recipe saved = recipeRepo.findByName(entity.getName())
-                    .orElseThrow(() -> new RuntimeException("Error recovering saved recipe: " + entity.getName()));
-            saveIngredientsInternal(saved.getId(), dto.getIngredients());
+            Recipe saved = recipeRepo.save(entity);
+            recipeId = saved.getId();
         } else {
-            recipeRepo.update(entity);
-            riRepo.deleteAllByRecipeId(entity.getId());
-            saveIngredientsInternal(entity.getId(), dto.getIngredients());
+            Recipe updated = recipeRepo.update(entity);
+            recipeId = updated.getId();
+            riRepo.deleteAllByRecipeId(recipeId);
         }
+        saveIngredientsInternal(recipeId, dto.getIngredients());
     }
 
     @Override
@@ -56,6 +71,7 @@ public class RecipeService implements IService<RecipeDTO, Long> {
         Recipe entity = new Recipe();
         entity.setId(dto.getId());
         recipeRepo.delete(entity);
+        riRepo.deleteAllByRecipeId(entity.getId());
     }
 
     @Override

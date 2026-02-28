@@ -31,27 +31,38 @@ public class IngredientRepository implements IRepository<Ingredient, Long> {
     }
 
     @Override
-    public void save(Ingredient entity) {
+    public Ingredient save(Ingredient entity) {
         String sql = "INSERT INTO ingredients (name, supplier_id) VALUES (?, ?)";
         try (var conn = DataBaseConfig.getInstance().getConnection();
-             var pstmt = conn.prepareStatement(sql)) {
+             var pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, entity.getName());
             pstmt.setLong(2, entity.getSupplierId());
             pstmt.executeUpdate();
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1));
+                }
+            }
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException("Error saving ingredient: " + entity.getName(), e);
         }
     }
 
     @Override
-    public void update(Ingredient entity) {
+    public Ingredient update(Ingredient entity) {
         String sql = "UPDATE ingredients SET name = ?, supplier_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         try (var conn = DataBaseConfig.getInstance().getConnection();
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, entity.getName());
             pstmt.setLong(2, entity.getSupplierId());
             pstmt.setLong(3, entity.getId());
-            pstmt.executeUpdate();
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("cant be updated: the ingredient ID " + entity.getId() + " doesnt exist.");
+            }
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException("Error updating ingredient ID: " + entity.getId(), e);
         }
