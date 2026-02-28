@@ -23,23 +23,28 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
 
     - name: Build Shadow JAR
-      working-directory: ./ProyectoCocina
       shell: bash
       run: |
+        GRADLEW_PATH=$(find . -name gradlew -type f -printf '%h' -quit)
+        cd "$GRADLEW_PATH"
         chmod +x gradlew
         ./gradlew shadowJar
 
     - name: Create Installer with jpackage
-      working-directory: ./ProyectoCocina
+      shell: bash
       run: |
-        jpackage `
-          --name "KitchenProject" `
-          --input build/libs/ `
-          --main-jar ProyectoCocina-1.0-all.jar `
-          --main-class org.proyectococina.Launcher `
-          --type exe `
-          --win-shortcut `
-          --win-menu `
+        JAR_PATH=$(find . -name "ProyectoCocina-*-all.jar" -type f -quit)
+        JAR_DIR=$(dirname "$JAR_PATH")
+        JAR_NAME=$(basename "$JAR_PATH")
+        
+        jpackage \
+          --name "KitchenProject" \
+          --input "$JAR_DIR" \
+          --main-jar "$JAR_NAME" \
+          --main-class org.proyectococina.Launcher \
+          --type exe \
+          --win-shortcut \
+          --win-menu \
           --icon src/main/resources/icon.ico
 
     - name: Upload EXE Artifact
