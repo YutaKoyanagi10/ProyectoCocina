@@ -9,7 +9,7 @@ Welcome to **Proyecto Cocina**! A comprehensive tool developed in Java for manag
 1. Go to the **[Releases](https://github.com/YutaKoyanagi10/ProyectoCocina/releases)** section.
 2. Download the latest `ProyectoCocina-Installer.exe`.
 3. Run the installer and follow the setup steps.
-4. **exec as Administrator**Important!!
+4. **exec as Administrator**
 
 ---
 
