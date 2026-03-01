@@ -81,7 +81,7 @@ public class IngredientFormViewController {
 
     private void returnToList() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/IngredientesView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/proyectococina/ui/view/IngredientsView.fxml"));
             Parent root = loader.load();
             
             StackPane contentArea = (StackPane) ingredientNameField.getScene().lookup("#contentArea");
