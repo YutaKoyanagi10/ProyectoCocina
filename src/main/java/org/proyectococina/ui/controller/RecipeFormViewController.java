@@ -68,6 +68,9 @@ public class RecipeFormViewController {
                     }
                     
                     ingredientsDTO.add(new RecipeIngredientDTO(ingredient, spinner.getValue(), unitCombo.getValue()));
+                } else {
+                    ShowAlert.show("Todos los ingredientes deben tener un nombre y unidad válidos.", Alert.AlertType.WARNING);
+                    return;
                 }
             }
         }
