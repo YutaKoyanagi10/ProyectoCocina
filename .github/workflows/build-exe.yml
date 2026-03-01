@@ -32,7 +32,6 @@ jobs:
     - name: Create Installer with jpackage
       shell: bash
       run: |
-        # Buscamos el JAR generado
         JAR_PATH=$(find . -name "*all.jar" -type f | head -n 1)
         JAR_DIR=$(dirname "$JAR_PATH")
         JAR_NAME=$(basename "$JAR_PATH")
@@ -47,8 +46,12 @@ jobs:
           --win-menu \
           --icon "src/main/resources/icon.ico"
           
-    - name: Upload EXE Artifact
-      uses: actions/upload-artifact@v4
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
       with:
-        name: Windows-Installer
-        path: "*.exe"
+        files: "*.exe"
+        name: "Release ${{ github.ref_name }}"
+        body: "windows installer for version ${{ github.ref_name }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
