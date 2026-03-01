@@ -7,9 +7,9 @@ Welcome to **Proyecto Cocina**! A comprehensive tool developed in Java for manag
 ## 🚀 For Users
 
 1. Go to the **[Releases](https://github.com/YutaKoyanagi10/ProyectoCocina/releases)** section.
-2. Download the latest `Proyecto Cocina-Installer.exe`.
+2. Download the latest `ProyectoCocina-Installer.exe`.
 3. Run the installer and follow the setup steps.
-4. **Done!**
+4. **exec as Administrator**Important!!
 
 ---
 
@@ -20,7 +20,6 @@ Welcome to **Proyecto Cocina**! A comprehensive tool developed in Java for manag
 * **Language:** Java 21
 * **UI Framework:** JavaFX
 * **Dependency Management:** Gradle
-* **Architecture:** DTO Pattern, Repositories, and Services.
 
 ### Prerequisites
 
@@ -34,12 +33,12 @@ Welcome to **Proyecto Cocina**! A comprehensive tool developed in Java for manag
    git clone [https://github.com/YutaKoyanagi10/ProyectoCocina.git](https://github.com/YutaKoyanagi10/ProyectoCocina.git)
    cd ProyectoCocina
 
-2. Run the application (Linux/macOS)
+2. Run the application
 
     ```bash
     ./gradlew run
     
-3. Run the application (windows)
+3. Run test
 
     ```bash
-    gradlew.bat run
+    ./gradlew test
