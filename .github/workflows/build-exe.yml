@@ -2,8 +2,12 @@ name: Generate Windows Installer (.exe)
 
 on:
   push:
-    branches: [ "main", "master" ]
+    tags:
+      - 'v*' 
   workflow_dispatch:
+
+permissions:
+  contents: write 
 
 jobs:
   build:
@@ -22,36 +26,34 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
       with:
-        gradle-version: 8.7 
+        gradle-version: 8.7
 
     - name: Build Shadow JAR
-      shell: bash
-      run: |
-        gradle shadowJar
+      run: gradle shadowJar
 
     - name: Create Installer with jpackage
       shell: bash
       run: |
-        JAR_PATH=$(find . -name "*all.jar" -type f | head -n 1)
-        JAR_DIR=$(dirname "$JAR_PATH")
-        JAR_NAME=$(basename "$JAR_PATH")
+        JAR_PATH=$(find build/libs -name "*all.jar" -type f | head -n 1)
+    
+        mkdir -p dist
+        cp "$JAR_PATH" dist/
         
         jpackage \
-          --name "Proyecto Cocina" \
-          --input "$JAR_DIR" \
-          --main-jar "$JAR_NAME" \
+          --name "ProyectoCocina" \
+          --input dist \
+          --main-jar $(basename "$JAR_PATH") \
           --main-class org.proyectococina.Launcher \
           --type exe \
           --win-shortcut \
           --win-menu \
-          --icon "src/main/resources/icon.ico"
+          --icon "src/main/resources/icon.ico" \
+          --dest .
           
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: "*.exe"
-        name: "Release ${{ github.ref_name }}"
-        body: "windows installer for version ${{ github.ref_name }}"
+        files: "*.exe" 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
